@@ -1,0 +1,31 @@
+{
+  "test_id": "TEST-018",
+  "status": "PASS",
+  "recorded_at_utc": "2026-10-11T15:41:24Z",
+  "evaluator": "opencode",
+  "redacted": "true",
+  "notice": "Live provider inference executed. No API key, token, or credential value is recorded anywhere in this evidence; only metadata and resulting database-originated identifiers are retained.",
+  "provider": "OpenRouter",
+  "configured_model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "base_url": "https://openrouter.ai/api/v1/chat/completions",
+  "endpoint": "POST /api/suggestions",
+  "http_status": 200,
+  "request": {
+    "query": "I need a solution for automated customer support routing and case summarization",
+    "authenticated": true,
+    "query_chars": 78
+  },
+  "response": {
+    "suggestions_returned": 3,
+    "notice": null,
+    "matched_catalog_product_ids": [3, 1, 2],
+    "matched_catalog_products": [
+      "Demo Data Integration Hub",
+      "Demo Edge Vision Gateway",
+      "Demo Sensor Monitor"
+    ],
+    "reasons_present": true
+  },
+  "verification": "The live provider call returned three suggestions resolved against the existing SQLite product catalog (IDs 3, 1, 2) with provider-generated reasons and no error notice. This is a real HTTPS inference against OpenRouter, satisfying TEST-018's requirement of at least one non-mocked provider call.",
+  "redaction": "Authorization token and OPENROUTER_API_KEY values were omitted from logs and evidence. The temporary response body was inspected for verification and not retained with any credential."
+}
