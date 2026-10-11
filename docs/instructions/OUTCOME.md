@@ -49,7 +49,7 @@ Source history is managed with Git and includes a working CI/CD workflow: automa
 
 ### OUT-006 — Handover and demonstration Package
 
-Deliver a Git repository URL suitable for inclusion in an email to **[removed-contact]** and **[removed-contact]**. Provide README instructions, environment configuration guidance with no checked-in secrets, product sample data marked as demo data, endpoint docs, test/scan proof, and presentation material for a **maximum 10-minute** local walkthrough containing: **As Is vs To Be, System Architecture, System Features, User Stories, UI Flow**.
+Deliver a Git repository URL suitable for inclusion in an email to Demo. Provide README instructions, environment configuration guidance with no checked-in secrets, product sample data marked as demo data, endpoint docs, test/scan proof, and presentation material for a **maximum 10-minute** local walkthrough containing: **As Is vs To Be, System Architecture, System Features, User Stories, UI Flow**.
 
 **Proof:** Repository URL available, documented setup/review checklist, presentation content and 10-minute rehearsal/demo path.
 
