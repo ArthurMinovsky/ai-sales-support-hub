@@ -23,6 +23,6 @@ export function LogoutButton() {
     finally { router.push("/login"); router.refresh(); setPending(false); }
   }
   return <button className="signout" type="button" disabled={pending} onClick={logout}>
-    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" style={{ marginRight: 6, verticalAlign: "-2px" }}><path d="M6 2H3.5A1.5 1.5 0 0 0 2 3.5v9A1.5 1.5 0 0 0 3.5 14H6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/><path d="M10.5 11 14 8l-3.5-3M14 8H6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>Sign out
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="signout-icon"><path d="M6 2H3.5A1.5 1.5 0 0 0 2 3.5v9A1.5 1.5 0 0 0 3.5 14H6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/><path d="M10.5 11 14 8l-3.5-3M14 8H6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>Sign out
   </button>;
 }

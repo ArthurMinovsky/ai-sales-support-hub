@@ -106,17 +106,9 @@ jobs:
         id: security
         shell: bash
         run: |
-          mkdir -p evidence/security/{sca,sast,iac}
-          set +e
-          pip-audit -f json -o evidence/security/sca/pip-audit.json
-          echo $? > evidence/security/sca/pip-audit-exit.txt
-          (cd web && npm audit --json) > evidence/security/sca/npm-audit.json
-          echo $? > evidence/security/sca/npm-audit-exit.txt
-          /tmp/scan-tools/bin/semgrep scan --config .semgrep.yml --json --output evidence/security/sast/semgrep.json .
-          echo $? > evidence/security/sast/semgrep-exit.txt
-          /tmp/scan-tools/bin/checkov -d . --framework dockerfile,github_actions --output json > evidence/security/iac/checkov.json
-          echo $? > evidence/security/iac/checkov-exit.txt
-          echo "SCA/SAST/IaC tool results collected; severity triage required"
+          SECURITY_EVIDENCE_DIR="$PWD/evidence/security" \
+          SECURITY_CATEGORIES=sca,sast,iac \
+          PATH="/tmp/scan-tools/bin:$PATH" bash scripts/security/run-scans.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -149,10 +141,8 @@ jobs:
           exit 1
       - name: ZAP Baseline DAST (unauthenticated passive scope)
         run: |
-          mkdir -p evidence/security/dast
-          set +e
-          docker run --rm --network host -v "$PWD/evidence/security/dast:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t "$DAST_TARGET" -J zap.json -r zap.html -I
-          echo $? > evidence/security/dast/zap-exit.txt
+          bash scripts/security/run-zap.sh "$PWD/evidence/security/dast" "$DAST_TARGET" host
+          python3 scripts/security/triage.py --evidence-dir "$PWD/evidence/security" --categories dast
       - name: Save scanner report
         if: always()
         uses: actions/upload-artifact@v4
@@ -164,7 +154,7 @@ jobs:
         run: docker compose -p saleshub-dast down
   release_image:
     runs-on: ubuntu-latest
-    needs: [backend, frontend, integration]
+    needs: [backend, frontend, integration, sca_sast_iac, dast]
     steps:
       - uses: actions/checkout@v4
       - name: Build reproducible app images

@@ -1,57 +1,143 @@
 {
   "plan_id": "PLAN-008",
   "plan_revision": "R2",
-  "recorded_at_utc": "2026-10-11T13:59:12Z",
+  "recorded_at_utc": "2026-10-11T22:05:16Z",
   "source_revision": {
     "branch": "main",
-    "commit": null,
-    "implementation_test_inputs_sha256": "30ec1aa74c28dd316c4c7605c101c3ee77db390f2b113ad2984d78d97071814a"
+    "base_commit": "c9b5610ddf23bfc04749455512f4d4d891089162",
+    "changes": "Uncommitted TEST-019 fixes plus reporting updates",
+    "executed_snapshot_digest": "67ba389c857e95307e0d01c0e67a58219abf11b1019f039f386925e01310cd2f",
+    "digest_note": "Recorded before subsequent documentation/evidence edits; per-file verified implementation hashes identify the executed code.",
+    "verified_source_file_hashes": {
+      ".github/workflows/ci.yml": "45becbf892568f83435412da3420d44324778f9e153309ccc2cb81db8bb25759",
+      "scripts/security/run-scans.sh": "292dbe9cb52fd70b58025c2a4490b5e3c805fa955458f62c27430d7d4c16fd37",
+      "scripts/security/run-zap.sh": "e6ea1e554ccb6f9d91d321684a94d9d46cd6508b8265d6969dbc8c66d2f3c18a",
+      "scripts/security/triage.py": "a6cca023e093f313e190fa31c53ec01ca3509020f323f93602203503ee0793f6",
+      "web/next.config.ts": "7588877f617326f5218c469bbc996966da15b85832f1920647915de9641afdbd",
+      "web/src/middleware.ts": "0a9cfd60c3366c69a17209406be3f5525bffcb29968955c459c4e7857e956f1f",
+      "web/src/app/layout.tsx": "f9cd051aa7cc2da86d72ca21ee95507eb7cad597a9a60ff17eb4aa3dfefbe868",
+      "web/src/components/RecommendationResults.tsx": "122e481cf26237d66d0da0c0fcc23567d9f6d2b489b00c8b0f58d44f91589344",
+      "web/src/app/globals.css": "d89ec29a045742df18f994b88188dcddf735dabe99eec2a422f77e0ac56bb653",
+      "web/tests/e2e/security.spec.ts": "5026b404c69e2bdf6743a9b452f47e3a7cbaa4d9d3c1525db3af2fbf5fe29c9c",
+      "tests/verification/test_security_triage.py": "bcba1604336989b9d611128962a1d7d8ce452515db44c75bd90b09dad6b4fd53"
+    }
   },
   "actions": [
     {
       "id": "PLAN-008-A01",
-      "status": "PARTIAL",
+      "status": "LOCAL_IMPLEMENTATION_VERIFIED_REMOTE_PENDING",
       "expected": "CI jobs define backend tests, frontend checks, Compose E2E, scans and a retrievable release artifact.",
-      "observed": "Workflow source defines these jobs and uploads an image tar artifact, but no GitHub Actions run exists.",
-      "evidence": [".github/workflows/ci.yml"],
-      "next_gate": "Configure an authorized Git remote, make the required reviewed commit, and run CI after the governance gates."
+      "observed": "CI source now uses shared collectors and strict triage and gates release_image on security. Fresh Checkov workflow 176/176 passed. Baseline CI exists; modified workflow NOT_RUN remotely.",
+      "evidence": [
+        ".github/workflows/ci.yml",
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/final-scans/iac/checkov.json"
+      ],
+      "next_gate": "Review/publication decision and authorized remote run of the modified workflow."
     },
     {
       "id": "PLAN-008-A02",
-      "status": "COMPLETE",
+      "status": "COMPLETE_WITH_REVIEWED_FINDINGS",
       "expected": "SCA, SAST, IaC and passive DAST each produce real reports and exit records.",
-      "observed": "pip-audit and npm audit reported zero advisories; Semgrep reported zero findings; Checkov completed with 118 Docker checks passed and one documented CKV_SECRET_6 skip; ZAP completed with 59 PASS, 0 FAIL and 8 warning categories.",
+      "observed": "Four actual scanner categories with logs/versions/exits/valid reports. pip/npm 0 advisories; Semgrep 23 files/0 findings; Checkov 294/0; ZAP 0 high/0 low/1 medium/3 informational alert types. Raw ZAP exit 2 and complete JSON/HTML retained.",
       "evidence": [
-        "evidence/security/sca/",
-        "evidence/security/sast/semgrep.json",
-        "evidence/security/iac/results_json.json",
-        "evidence/security/dast/zap.json",
-        "evidence/security/scan-review.json"
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/summary.json",
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/review.json",
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/final-scans/triage-summary.json"
       ],
-      "next_gate": "Review the reported ZAP response-header warnings; do not interpret scan execution as zero risk."
+      "next_gate": "No extra local TEST-019 permission needed; reviewed image warning remains visible."
     },
     {
       "id": "PLAN-008-A03",
-      "status": "BLOCKED",
+      "status": "HISTORICAL_BASELINE_PASS_NEW_WORKFLOW_PENDING",
       "expected": "A retrievable image artifact and digest from a real CI run.",
-      "observed": "Local Docker images built successfully; GitHub artifact has not been produced.",
-      "evidence": ["evidence/docker/smoke.json"],
-      "next_gate": "GitHub remote, reviewed local commit, and authorized CI run."
+      "observed": "Real committed-baseline CI run 38157463221 succeeded with docker-release-images archive 162,507,922 bytes. This record does not verify new uncommitted workflow changes.",
+      "evidence": [
+        "https://github.com/ArthurMinovsky/ai-sales-support-hub/actions/runs/38157463221"
+      ],
+      "next_gate": "Remote verification of updated source after authorized publication."
     },
     {
       "id": "PLAN-008-A04",
-      "status": "COMPLETE_WITH_SCOPE_LIMITS",
+      "status": "COMPLETE_WITH_REVIEWED_SCOPE_LIMITS",
       "expected": "Run passive ZAP only after readiness, retain reports and exit status, then remove test-owned containers without deleting volumes.",
-      "observed": "Readiness was verified; ZAP scanned 21 unauthenticated URLs on the Compose network and retained JSON/HTML/Markdown reports and command status. E2E fixture containers were removed without -v; the plain local deployment was restored on the same named volume.",
+      "observed": "Isolated Compose readiness passed, passive ZAP targeted http://web:3000 and copied valid reports before removing its owned scanner. Fixture containers removed without -v; test volume retained. Main API/SQLite unchanged during Web refresh.",
       "evidence": [
-        "evidence/security/dast/final-plain-command.txt",
-        "evidence/security/dast/exit-code.txt",
-        "evidence/security/dast/zap.json",
-        "evidence/security/dast/zap.html"
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/runtime-final.json",
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/final-scans/dast/zap.json",
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/final-scans/dast/zap.html",
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/teardown.json",
+        "/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/evidence/security/runs/20261011213538Z/local-web-refresh.json"
       ],
-      "limits": ["Authenticated routes were not in the passive DAST scope.", "No remote CI run was available."]
+      "limits": [
+        "Passive unauthenticated DAST does not cover authenticated API/CRUD.",
+        "Modified workflow has not run remotely."
+      ]
     }
   ],
-  "overall_status": "PARTIAL_BLOCKED_ON_REMOTE_CI",
-  "next_gate": "TEST-022 requires a GitHub remote and reviewed commit; TEST-018 and manual acceptance remain separate blockers."
+  "overall_status": "TEST019_LOCAL_PASS_REMOTE_UPDATED_WORKFLOW_PENDING",
+  "next_gate": "Independent review/publication decision for new fixes; manual TEST-025/026 remain separate.",
+  "historical_record": {
+    "plan_id": "PLAN-008",
+    "plan_revision": "R2",
+    "recorded_at_utc": "2026-10-11T13:59:12Z",
+    "source_revision": {
+      "branch": "main",
+      "commit": null,
+      "implementation_test_inputs_sha256": "30ec1aa74c28dd316c4c7605c101c3ee77db390f2b113ad2984d78d97071814a"
+    },
+    "actions": [
+      {
+        "id": "PLAN-008-A01",
+        "status": "PARTIAL",
+        "expected": "CI jobs define backend tests, frontend checks, Compose E2E, scans and a retrievable release artifact.",
+        "observed": "Workflow source defines these jobs and uploads an image tar artifact, but no GitHub Actions run exists.",
+        "evidence": [
+          ".github/workflows/ci.yml"
+        ],
+        "next_gate": "Configure an authorized Git remote, make the required reviewed commit, and run CI after the governance gates."
+      },
+      {
+        "id": "PLAN-008-A02",
+        "status": "COMPLETE",
+        "expected": "SCA, SAST, IaC and passive DAST each produce real reports and exit records.",
+        "observed": "pip-audit and npm audit reported zero advisories; Semgrep reported zero findings; Checkov completed with 118 Docker checks passed and one documented CKV_SECRET_6 skip; ZAP completed with 59 PASS, 0 FAIL and 8 warning categories.",
+        "evidence": [
+          "evidence/security/sca/",
+          "evidence/security/sast/semgrep.json",
+          "evidence/security/iac/results_json.json",
+          "evidence/security/dast/zap.json",
+          "evidence/security/scan-review.json"
+        ],
+        "next_gate": "Review the reported ZAP response-header warnings; do not interpret scan execution as zero risk."
+      },
+      {
+        "id": "PLAN-008-A03",
+        "status": "BLOCKED",
+        "expected": "A retrievable image artifact and digest from a real CI run.",
+        "observed": "Local Docker images built successfully; GitHub artifact has not been produced.",
+        "evidence": [
+          "evidence/docker/smoke.json"
+        ],
+        "next_gate": "GitHub remote, reviewed local commit, and authorized CI run."
+      },
+      {
+        "id": "PLAN-008-A04",
+        "status": "COMPLETE_WITH_SCOPE_LIMITS",
+        "expected": "Run passive ZAP only after readiness, retain reports and exit status, then remove test-owned containers without deleting volumes.",
+        "observed": "Readiness was verified; ZAP scanned 21 unauthenticated URLs on the Compose network and retained JSON/HTML/Markdown reports and command status. E2E fixture containers were removed without -v; the plain local deployment was restored on the same named volume.",
+        "evidence": [
+          "evidence/security/dast/final-plain-command.txt",
+          "evidence/security/dast/exit-code.txt",
+          "evidence/security/dast/zap.json",
+          "evidence/security/dast/zap.html"
+        ],
+        "limits": [
+          "Authenticated routes were not in the passive DAST scope.",
+          "No remote CI run was available."
+        ]
+      }
+    ],
+    "overall_status": "PARTIAL_BLOCKED_ON_REMOTE_CI",
+    "next_gate": "TEST-022 requires a GitHub remote and reviewed commit; TEST-018 and manual acceptance remain separate blockers."
+  }
 }

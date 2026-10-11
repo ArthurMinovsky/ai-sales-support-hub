@@ -57,6 +57,7 @@ textarea { resize: vertical; line-height: 1.55; }
 .text-button.danger { color: var(--danger); }
 .text-button:hover:not(:disabled), .signout:hover:not(:disabled) { background: var(--accent-wash); }
 .signout { color: #a9c2cf; text-align: left; }
+.signout-icon { margin-right: 6px; vertical-align: -2px; }
 .signout:hover:not(:disabled) { background: var(--sidebar-line); color: var(--white); }
 .error { background: #fef2f3; color: var(--danger); border: 1px solid #fbd5da; padding: 10px 12px; border-radius: 8px; }
 .notice { background: #ecfdf5; color: var(--ok); border: 1px solid #c7ece0; padding: 10px 12px; border-radius: 8px; }

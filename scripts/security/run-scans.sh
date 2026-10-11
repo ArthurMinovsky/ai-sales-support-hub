@@ -1,61 +1,64 @@
 #!/usr/bin/env bash
-# Collect TEST-019 reports and preserve each scanner's actual exit status.
+# Execute TEST-019 in a new evidence directory; retain actual logs/statuses.
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT"
-mkdir -p evidence/security/{sca,sast,dast,iac}
-# Keep independent results even when one tool exits nonzero.
+REPORT_DIR="${SECURITY_EVIDENCE_DIR:-$ROOT/evidence/security/runs/$(date -u +%Y%m%dT%H%M%SZ)}"
+CATEGORIES="${SECURITY_CATEGORIES:-sca,sast,iac,dast}"
+export SECURITY_EVIDENCE_DIR="$REPORT_DIR"
+mkdir -p "$REPORT_DIR"/{sca,sast,dast,iac}
 run_report() {
-  local name="$1"; shift
-  printf 'Executing %s: %q ' "$name" "$@"; echo
-  "$@"; local status=$?
-  printf '%s
-' "$status" > "evidence/security/$name/exit-code.txt"
-  return 0
+  local category="$1" name="$2"; shift 2
+  printf '%q ' "$@" > "$REPORT_DIR/$category/$name-command.txt"
+  printf '\n' >> "$REPORT_DIR/$category/$name-command.txt"
+  "$@" > "$REPORT_DIR/$category/$name.log" 2>&1
+  local status=$?
+  printf '%s\n' "$status" > "$REPORT_DIR/$category/$name-exit.txt"
 }
-
-if command -v pip-audit >/dev/null; then
-  run_report sca pip-audit --format json --output evidence/security/sca/pip-audit.json
-else
-  echo 'pip-audit unavailable' | tee evidence/security/sca/pip-audit.missing
+requested() { [[ ",$CATEGORIES," == *",$1,"* ]]; }
+python3 - <<'PY'
+from datetime import datetime, timezone
+from pathlib import Path
+import hashlib, json, os, platform, subprocess
+root = Path.cwd()
+paths = subprocess.check_output(["git", "ls-files", "-co", "--exclude-standard"], text=True).splitlines()
+files = {p: hashlib.sha256((root / p).read_bytes()).hexdigest() for p in sorted(set(paths)) if (root / p).is_file()}
+digest = hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
+metadata = {"started_at": datetime.now(timezone.utc).isoformat(), "source_revision": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(), "source_digest": digest, "file_hashes": files, "platform": platform.platform(), "categories": os.environ.get("SECURITY_CATEGORIES", "sca,sast,iac,dast")}
+(Path(os.environ["SECURITY_EVIDENCE_DIR"]) / "source.json").write_text(json.dumps(metadata, indent=2) + "\n")
+PY
+if requested sca; then
+  pip-audit --version > "$REPORT_DIR/sca/pip-audit-version.txt" 2>&1
+  run_report sca pip-audit pip-audit -f json -o "$REPORT_DIR/sca/pip-audit.json"
+  npm --version > "$REPORT_DIR/sca/npm-version.txt" 2>&1
+  (cd web && npm audit --json > "$REPORT_DIR/sca/npm-audit.json" 2> "$REPORT_DIR/sca/npm-audit.log")
+  printf '%s\n' "$?" > "$REPORT_DIR/sca/npm-audit-exit.txt"
 fi
-if command -v npm >/dev/null; then
-  (cd web && npm audit --json > ../evidence/security/sca/npm-audit.json); printf '%s
-' "$?" > evidence/security/sca/npm-audit-exit-code.txt
-else
-  echo 'npm unavailable' > evidence/security/sca/npm-audit.missing
+if requested sast; then
+  semgrep --version > "$REPORT_DIR/sast/semgrep-version.txt" 2>&1
+  run_report sast semgrep semgrep scan --config .semgrep.yml --json --output "$REPORT_DIR/sast/semgrep.json" .
 fi
-if command -v semgrep >/dev/null; then
-  run_report sast semgrep scan --config .semgrep.yml --json --output evidence/security/sast/semgrep.json .
-else
-  echo 'semgrep unavailable' > evidence/security/sast/semgrep.missing
+if requested iac; then
+  checkov --version > "$REPORT_DIR/iac/checkov-version.txt" 2>&1
+  checkov -d . --framework dockerfile,github_actions --output json > "$REPORT_DIR/iac/checkov.json" 2> "$REPORT_DIR/iac/checkov.log"
+  printf '%s\n' "$?" > "$REPORT_DIR/iac/checkov-exit.txt"
 fi
-if command -v checkov >/dev/null; then
-  run_report iac checkov -f backend/Dockerfile -f web/Dockerfile -f compose.yaml -f .github/workflows/ci.yml --output json --output-file-path evidence/security/iac
-else
-  echo 'checkov unavailable' > evidence/security/iac/checkov.missing
-fi
-# DAST requires an already healthy live target. CI runs this only after readiness.
-DAST_TARGET="${DAST_TARGET:-}"
-API_BASE_URL="${API_BASE_URL:-}"
-if command -v docker >/dev/null; then
-  if [[ -z "$DAST_TARGET" ]]; then
-    web_port="$(docker compose port --index 1 web 3000 | sed -n '1s/.*://p')"
-    [[ "$web_port" =~ ^[0-9]+$ ]] && DAST_TARGET="http://localhost:$web_port"
+if requested dast; then
+  target="${DAST_TARGET:-}"
+  api="${API_BASE_URL:-}"
+  if [[ -z "$target" ]]; then
+    port="$(docker compose port --index 1 web 3000 | sed -n '1s/.*://p')"
+    [[ "$port" =~ ^[0-9]+$ ]] && target="http://localhost:$port"
   fi
-  if [[ -z "$API_BASE_URL" ]]; then
-    api_port="$(docker compose port --index 1 api 8000 | sed -n '1s/.*://p')"
-    [[ "$api_port" =~ ^[0-9]+$ ]] && API_BASE_URL="http://localhost:$api_port"
+  if [[ -z "$api" ]]; then
+    port="$(docker compose port --index 1 api 8000 | sed -n '1s/.*://p')"
+    [[ "$port" =~ ^[0-9]+$ ]] && api="http://localhost:$port"
+  fi
+  if [[ -n "$target" && -n "$api" ]] && curl --max-time 5 -fsS "$api/health" > "$REPORT_DIR/dast/api-readiness.json" && curl --max-time 5 -fsS "$target/login" > "$REPORT_DIR/dast/web-readiness.html"; then
+    bash scripts/security/run-zap.sh "$REPORT_DIR/dast" "${DAST_DOCKER_TARGET:-$target}" "${DAST_DOCKER_NETWORK:-host}"
+    printf '%s\n' "$?" > "$REPORT_DIR/dast/collection-exit.txt"
+  else
+    echo "DAST target did not pass Web/API readiness" > "$REPORT_DIR/dast/BLOCKED.txt"
   fi
 fi
-if [[ -n "$DAST_TARGET" && -n "$API_BASE_URL" ]] && curl --max-time 5 -fsS "$API_BASE_URL/health" >/dev/null && curl --max-time 5 -fsS "$DAST_TARGET/login" >/dev/null; then
-  # On Docker Desktop, use a Compose network and DAST_DOCKER_TARGET=http://web:3000.
-  scan_target="${DAST_DOCKER_TARGET:-$DAST_TARGET}"
-  printf '%s\n' "$scan_target" > evidence/security/dast/target.txt
-  docker run --rm --network "${DAST_DOCKER_NETWORK:-host}" -v "$ROOT/evidence/security/dast:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t "$scan_target" -J zap.json -r zap.html -I
-  printf '%s
-' "$?" > evidence/security/dast/exit-code.txt
-else
-  echo 'DAST prerequisite not ready (Docker or health target)' > evidence/security/dast/BLOCKED.txt
-fi
-python3 scripts/security/triage.py
+python3 scripts/security/triage.py --evidence-dir "$REPORT_DIR" --categories "$CATEGORIES"
