@@ -1,6 +1,6 @@
 # HANDOFF — AI Sales Support Hub
-> Lifecycle state: `LOCAL_FULL_VERIFICATION_COMPLETE` (all 68 paths implemented and verified; tests, scans, live OpenRouter and realism upgrade executed; state committed locally on `main`; no remote/CI yet)
-> Last reviewed: 2026-10-11 (evening), Asia/Bangkok. Now on the User's Mac at `/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub` (Git repository, branch `main`, local commits only).
+> Lifecycle state: `AUTO_START_URL_REPORTING_VERIFIED` — automatic one-command Docker launch verified; TEST-019 retains its separately recorded local PASS with findings. Changes uncommitted; independent/manual acceptance pending.
+> Last reviewed: 2026-10-12, Asia/Bangkok, by Codex on the User's Mac. Main Web refreshed to tested image at http://localhost:55016; API remains http://localhost:55011; SQLite data unchanged.
 
 ## 1. Objective / source of authority
 Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagger + OpenRouter; Next.js + TypeScript registration/login, 3600s JWT and protected product CRUD/search; Pytest/Playwright; Git/CI, Compose one-command and SCA/SAST/DAST/IaC with evidence; reviewer documentation and 10-minute pitch. Employer project is the three-page `ข้อสอบ.pdf`; governing meanings are the approved contract files listed below.
@@ -8,11 +8,11 @@ Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagg
 ## 2. Harness, destination and ownership
 - **Harness:** opencode on the User's Mac (Codex desktop session 01a12aec-97b1-7141-8900-6788f191c912 performed the earlier verification work; opencode continued it).
 - **User-local project path:** `/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub`.
-- **Git state:** initialized on `main` with local commits only (no remote, no push). Commit chain: `54fa34b` (initial fully verified implementation) → `662e51b` (TEST-018 live OpenRouter verification) → `017db6a` (dynamic-port URL discovery helper + README) → `093b5de` (realism upgrade: catalog, UI, test data) → `3bbabc0` (HANDOFF state update) → `c323dd3` (remove CI workflow backup) → `a7e84a6` (CI scanner-venv fix).
-- **Remote:** `https://github.com/ArthurMinovsky/ai-sales-support-hub` (public, pushed; branch `main` in sync). GitHub Actions run 38157082971 = success, all 6 jobs, with retained image artifact — TEST-022 satisfied.
+- **Git state:** main, baseline `c9b5610ddf23bfc04749455512f4d4d891089162`; TEST-019 changes and the new `start` launcher/reporting updates remain uncommitted. No new commit/push.
+- **Remote:** `https://github.com/ArthurMinovsky/ai-sales-support-hub` (public). Baseline CI 38157463221 on `c9b5610`: six successful jobs; DAST JSON/HTML absent. Modified workflow has not run remotely.
 - **Lifecycle directory within project:** `docs/instructions/`.
 - **ClickUp tracking:** still `NOT_LINKED` (searched 2026-10-11; no matching task; no card created).
-- **Outstanding resources:** OPENROUTER_API_KEY and JWT_SECRET now exist only in the local gitignored `.env` (key User-provided at runtime; never committed or logged). Repo remote URL/credentials remain unavailable, so TEST-022 (real GitHub Actions run) is still pending.
+- **Runtime resources:** securely provided OpenRouter/JWT settings remain in ignored local `.env`; values were not read/printed/changed in this security fix. GitHub baseline proof exists. ClickUp tracking, independent review and manual acceptance remain separate.
 
 ## 3. Approval record / immutable contracts
 - On 2026-10-11 User explicitly approved `PLAN-001..004 R2`, `PLAN-006..008 R2` and directed transition to HANDOFF and *separate* Initial Source Create Batch approval.
@@ -48,12 +48,12 @@ Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagg
 - [x] User permission granted (Fast Mode authorization, 2026-10-11) for the scoped local edits, builds, tests and debug loop.
 - [x] Create the exact approved initial source files in the authorized project root.
 - [x] Resolve the full npm lockfile; Docker/CI use `npm ci` (reproducibility gap closed).
-- [x] Execute all Core automated tests with real evidence: Pytest 11/11, Playwright 15/15 (incl. origin-policy suite), persistence TEST-010, Compose smoke TEST-020/021.
-- [x] Execute the four security scans (SCA/SAST/IaC/DAST) with retained reports and zero unresolved findings (Checkov 294/0 after the workflow-level permissions fix and documented CKV_SECRET_6 false-positive skips).
+- [x] Fresh TEST-019 regressions: Pytest 11/11, Playwright 17/17 on actual isolated containers, evaluator 10/10, TypeScript and production Web build passed. Earlier persistence/Compose proof remains separately recorded.
+- [x] TEST-019 local PASS: four complete reports; SCA/SAST/IaC clear in scope; ZAP 0 high/0 low/1 medium/3 informational alert types. Raw ZAP exit 2; broad image-source warning reviewed in `evidence/security/runs/20261011213538Z/review.json`.
 - [x] TEST-018 live OpenRouter inference PASS with redacted evidence (model `nvidia/nemotron-3-super-120b-a12b:free`).
 - [x] Realism upgrade executed per approved `saleshub-realism_plan.md` (10-product Sales Support Hub-style catalog, professional self-contained UI, realistic test data).
 - [x] Local Git commits of the verified state (see §2 chain).
-- [ ] Present Walkthrough to User, obtain approval, then permissioned push to a remote and CI execution (TEST-022).
+- [x] Public baseline and successful CI available (38157463221). New security fixes remain uncommitted, with remote CI NOT_RUN; publication requires its own review/decision.
 - [ ] Independent review and post-review User decision; then Manual TEST-025/026 acceptance.
 
 ## 5. Dependency/execution graph and shared writers
@@ -66,14 +66,14 @@ Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagg
 ## 6. Quality / safety gates and blockers
 - `TEST-010`: **PASS** — named-volume restart without `docker compose down -v`, re-proven twice (latest after the realism rebuild). Evidence: `evidence/docker/persistence.json`.
 - `TEST-018`: **PASS** — at least one real OpenRouter HTTPS inference executed (twice: pre- and post-realism) with redacted evidence. Evidence: `evidence/openrouter/live-inference-redacted.json`.
-- `TEST-019`: **PASS** — four executed security scans with recorded target/severity/exit/report and test-owned cleanup. Evidence: `evidence/security/`.
+- `TEST-019`: **PASS locally with reviewed findings** — four actual reports, versions/targets/exits, report/code hashes, lower-severity review and teardown in `evidence/security/runs/20261011213538Z/summary.json`. Report retention directly verified; tool errors fail closed.
 - `TEST-020`: **PASS** — Docker build, Web/API readiness from one command (`docker compose -p saleshub-implementation-check up --build -d`), dynamic host ports. Evidence: `evidence/docker/smoke.json`.
-- `TEST-022`: **PASS** — actual GitHub Actions run 38157082971 (success, all 6 jobs: backend, frontend, integration, sca_sast_iac, dast, release_image) with retained `docker-release-images` artifact (~162 MB). First pushed run failed only in the scanner-install step; root cause (joint pip resolution of backend + semgrep backtracking to a semgrep-core-requiring sdist) fixed by isolating semgrep/checkov in their own CI venv. Evidence: `evidence/ci/github-actions-run.json` + run URL.
+- `TEST-022`: **Historical baseline PASS** — CI 38157463221 at `c9b5610`, six successful jobs/image archive. Its DAST retention gap was diagnosed and repaired locally; modified workflow is **NOT_RUN remotely**.
 - `TEST-025/026`: **PENDING** — Manual Outcome acceptance by User after code review and the walkthrough gate.
-- Remaining external blockers: Git remote/credentials, ClickUp task link, User walkthrough approval. Do not infer or fabricate any of them.
+- Remaining: review/publication of new fixes, independent review, walkthrough/manual acceptance and real ClickUp linkage. Remote Git and historical live-AI proof are available.
 
 ## 7. Current state → evidence → next gate → blockers
-`LOCAL_FULL_VERIFICATION_COMPLETE` → evidence in `evidence/` (backend pytest JUnit XML; Playwright execution record + HTML report; docker smoke + persistence records; security scan reports + scan-review + triage; redacted live-inference record; dynamic-port worker logs) and live local Compose stack (project `saleshub-implementation-check`, Docker-allocated dynamic ports, discover with `./scripts/status.sh`) → next gate: **User walkthrough approval, then remote push + GitHub Actions run (TEST-022), independent review, and Manual TEST-025/026** → blockers: no Git remote/credentials; ClickUp card still unlinked; TEST-022 cannot be satisfied locally.
+`TEST019_LOCAL_PASS_WITH_REVIEWED_FINDINGS` → new run's summary/review/raw reports, 11/17/10 regressions and preserved-volume teardown → review/publication decision and authorized remote CI of modified workflow; independent review/manual TEST-025/026 → no external hosting/final acceptance claimed.
 
 ## 8. Receiving harness instructions
 Before any further mutation, read the approved files in `docs/instructions/` (hashes unchanged in the table above), inspect `git log`/`git status` for the current commit chain, and verify the local stack with `./scripts/status.sh`. `.env` is gitignored and holds the only secrets (JWT_SECRET, User-provided OPENROUTER_API_KEY) — never commit, print or log them. The E2E fixture stack (`compose.yaml` + `compose.e2e.yaml`, project `saleshub-e2e`) is separate from the hosting stack; tear it down after test runs. Docker volumes were reset during the realism upgrade; the 10-product catalog seeds automatically on first start.
@@ -100,3 +100,24 @@ Executed under the User's Fast Mode authorization and subsequent explicit approv
 - **Git:** local commit chain in §2; working tree clean; `.env` and runtime evidence folders gitignored; `evidence/dynamic-ports/` and `evidence/openrouter/` intentionally tracked.
 - **Remote + CI:** pushed to `https://github.com/ArthurMinovsky/ai-sales-support-hub`; GitHub Actions run 38157082971 success (all 6 jobs) with retained image artifact — TEST-022 satisfied.
 - **Still pending:** User walkthrough approval, independent review, Manual TEST-025/026, 10-minute pitch rehearsal.
+## 11. TEST-019 repair checkpoint — 12 October 2026
+
+- User directed immediate completion under existing Fast Mode local edit/build/test/debug authorization. All 15 protected contracts/plans unchanged.
+- Root causes: nonroot ZAP could not write runner-owned bind output; prior successful exits concealed missing reports; Web lacked CSP/browser headers; root redirect had a large body. Review retains RED evidence and fixes.
+- Fixes: container-owned report collection, fail-closed triage/CI security dependencies, fresh response nonce CSP/browser headers, small public root redirect and CSS replacement of inline styling; 2 browser/10 evaluator regressions added.
+- Results: pip/npm 0 advisories; Semgrep 23 files/0 findings; Checkov 294/0; ZAP 0 high/0 low/1 medium/3 informational alert types. ZAP exit **2**, copy/collection/cleanup exits **0**. JSON 15,752 bytes, HTML 49,587 bytes retained.
+- Medium HTTPS image-source warning is real and retained for PRD ADR-006 external image URLs. Scripts/styles require nonces. A future host allowlist needs approved contract scope; unauthenticated passive DAST remains bounded.
+- Base `c9b5610` plus uncommitted fixes. Executed snapshot `67ba389c857e95307e0d01c0e67a58219abf11b1019f039f386925e01310cd2f` precedes later reporting edits; summary has exact tested code hashes.
+- Main Web only refreshed; API unchanged. SQLite before/after `818c627881399d2ccb31855b899b007fb2cb70c1910fe4e0c98984cae4503715`, 2 users/10 products/integrity OK. Old image retained; fixture named volume preserved after container teardown.
+- Evidence `evidence/security/runs/20261011213538Z/`: summary/review/execution ledger, raw reports/hashes/logs/exits, readiness/teardown/refresh. Backend 11/11, browser 17/17, evaluator 10/10, main security 2/2.
+- No fresh provider call, commit/push, remote modified-workflow run or independent/manual acceptance claim.
+## 12. Automatic startup URL reporting — 12 October 2026
+
+- User requested allocated ports be printed automatically after build/start, before any push. Existing Fast Mode local implementation/build/test authorization covers this bounded continuation.
+- Added executable POSIX-shell `start`; reviewed exact implementation creates one Compose launch with build/detach/wait, then queries actual mappings and prints Web/API/Swagger URLs. No new service, Docker socket mount, runtime dependency, fixed host port or protected-contract change.
+- Files: `start` CREATE; README/WALKTHROUGH/EXAM_APPENDIX/HANDOFF operational reporting edits. Trace: CORE-004/007, OUT-005/006/008, PLAN-001-A03/A04 + PLAN-009-A01, scoped TEST-020/021/010 verification.
+- Success: two isolated plain-stack `./start` invocations, exits 0. Web/API ports changed from 55018/55017 to 55020/55019; all printed login/health/Swagger endpoints HTTP 200. Startup failures print no misleading ready banner; six control checks passed.
+- Data: test SQLite hash unchanged across restart; 10 seed products, integrity OK. Main Web/API container IDs unchanged. Only owned test containers removed without `-v`; fixture volume remains.
+- Evidence: `evidence/docker/automatic-start/20261011T221254Z/summary.json`, `control-tests.json`, build/start/query/readiness/database/cleanup logs and exits. Executed `start` SHA-256 `04409bf7e7174fc4b4cfe1ce4cee806b67d9762cca1a50a5f1eea54b90428328`.
+- Limits: tested on local Docker Compose 5.5.1/macOS; launcher uses host POSIX shell/standard tools. No clean-checkout/full TEST-020, new live AI, remote CI or final acceptance claim. App code/Compose/Dockerfile bytes from TEST-019 unchanged; scanner results stay tied to that earlier snapshot.
+- Next: review/publish the combined local changes when authorized; independent review/manual decisions remain separate.

@@ -1,0 +1,28 @@
+#!/bin/sh
+# Build and start the app, then print Docker's actual published host URLs.
+set -eu
+
+CDPATH= cd "$(dirname "$0")"
+project="${COMPOSE_PROJECT_NAME:-saleshub-implementation-check}"
+
+docker compose -p "$project" up --build --detach --wait --wait-timeout 180
+
+published_port() {
+    binding="$(docker compose -p "$project" port --index 1 "$1" "$2")"
+    port="$(printf '%s\n' "$binding" | sed -n '1s/.*://p')"
+    case "$port" in
+        ''|0|*[!0-9]*)
+            printf 'Could not discover the published port for %s.\n' "$1" >&2
+            exit 1
+            ;;
+    esac
+    printf '%s' "$port"
+}
+
+web_port="$(published_port web 3000)"
+api_port="$(published_port api 8000)"
+
+printf '\nAI Sales Support Hub is ready\n'
+printf 'Web:     http://localhost:%s\n' "$web_port"
+printf 'API:     http://localhost:%s\n' "$api_port"
+printf 'Swagger: http://localhost:%s/docs\n' "$api_port"

@@ -2,7 +2,7 @@
 
 A small, demo-oriented product catalog and AI recommendation workspace for Sales Support Hub's Forward Deployed AI Engineer project.
 
-> **Source status:** Backend tests (11/11), browser tests (15/15), TypeScript checks, reproducible npm installation, Docker image builds, local Compose readiness, all four scanner categories and a redacted live OpenRouter inference have been executed — most recently against the realism-upgraded source (realistic 10-product catalog, professional UI). GitHub Actions, external hosting and manual acceptance remain pending. See the evidence matrix for exact scope and findings.
+> **Source status (12 October 2026):** TEST-019 passed locally with complete scan reports and reviewed findings. Fresh backend tests passed 11/11, Playwright 17/17, scan-evaluator tests 10/10, TypeScript and production Web build passed. Committed baseline `c9b5610` has successful GitHub Actions evidence; new security fixes are uncommitted and have not run remotely. Live AI has separate historical evidence; manual acceptance and external hosting remain pending.
 
 ## Stack and features
 
@@ -12,30 +12,29 @@ A small, demo-oriented product catalog and AI recommendation workspace for Sales
 - Next.js 15 TypeScript web, server-side BFF HttpOnly cookie, Origin checks on mutation requests, protected pages.
 - Pytest, Playwright, Docker Compose, GitHub Actions, four scanner configurations and evidence matrix prepared for separately authorized execution.
 
-## Reviewer launch (LOCALLY VERIFIED; LIVE AI AND CI PENDING)
+## Reviewer launch (local Docker verified)
 
 **Prerequisites:** Docker Engine + Docker Compose v2, network access for pulling images/dependencies, and a strong local JWT key. AI inference requires separately configured OpenRouter API key; catalog CRUD does not.
 
 1. Copy `.env.example` to `.env` (do not commit). Set `JWT_SECRET` to 32+ random characters. Optionally set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL`.
-2. Start both services with **one command**:
+2. Build and start both services with **one command**:
 
    ```sh
-   docker compose -p saleshub-implementation-check up -d --build
+   ./start
    ```
 
-3. Docker automatically allocates an unused host port for Web and API — no fixed port to collide with anything else on the machine. Get the current URLs with one command:
+   The command runs Docker Compose, waits until both services are healthy, then automatically prints the actual allocated Web, API and Swagger URLs. No separate status command is required.
 
-   ```sh
-   ./scripts/status.sh
+   ```text
+   AI Sales Support Hub is ready
+   Web:     http://localhost:<allocated-web-port>
+   API:     http://localhost:<allocated-api-port>
+   Swagger: http://localhost:<allocated-api-port>/docs
    ```
 
-   Or discover them manually:
+   Ports are assigned by Docker after the containers are created; they are not fixed in the launcher. To inspect an already running stack later, `./scripts/status.sh` remains available. An optional `COMPOSE_PROJECT_NAME` selects a different isolated stack.
 
-   ```sh
-   docker compose -p saleshub-implementation-check port --index 1 web 3000
-   docker compose -p saleshub-implementation-check port --index 1 api 8000
-   ```
-
+   The underlying plain Docker launch remains `docker compose -p saleshub-implementation-check up --build --detach --wait --wait-timeout 180`. The `start` entry point adds automatic URL reporting after this succeeds. It uses the host's POSIX shell and standard tools and requires no additional package installation.
 TEST-010 verified user and product persistence across `docker compose down` (without `-v`) and re-up. The evidence records the named volume and persisted product. **Never run `docker compose down -v` on data you wish to retain.**
 
 Host port allocation avoids collisions with existing containers on each machine. Internal container ports stay `3000` and `8000`; allocated host ports can change when containers are recreated. Leave `WEB_PORT=0`, `API_PORT=0` and `APP_ORIGIN=` for direct Docker access. Set `WEB_PORT` or `API_PORT` to a chosen host port when a stable mapping is needed. If an override is occupied, Docker reports an error; use `0` to restore automatic allocation.
@@ -62,22 +61,22 @@ Swagger login returns an access token for direct API testing; the browser does n
 
 ## Verification / security status
 
-- Backend command: `cd backend && pip install -e '.[test]' && pytest -q`. Latest run: 11 passed; XML is in `evidence/backend/pytest-results-post-origin-fix.xml`.
-- Frontend commands: `cd web && npm ci && npm run typecheck && npm run build`. Start an isolated fixture with `docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-e2e up --build -d`, then run `COMPOSE_PROJECT_NAME=saleshub-e2e npm run test:e2e` from `web/`; Playwright discovers its published Web port. `PLAYWRIGHT_BASE_URL` can override discovery for an existing test target. Final run: 15 passed (4 journeys + origin-policy suite); see `evidence/frontend/playwright-execution.json` and `evidence/frontend/playwright-report/`.
+- Backend: fresh Pytest 11/11; `evidence/security/runs/20261011213538Z/pytest-regression.xml`.
+- Frontend: TypeScript and production Docker build passed; isolated actual Web/API browser suite 17/17 (15 existing plus 2 security checks), recorded in `evidence/security/runs/20261011213538Z/playwright-final.json`. Start a fixture with `docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-e2e up --build -d`, then run `COMPOSE_PROJECT_NAME=saleshub-e2e npm run test:e2e` from `web/`. `PLAYWRIGHT_BASE_URL` overrides dynamic target discovery.
 - Mock OpenRouter in E2E verifies deterministic UI/error behavior only. A real, redacted live provider inference also passed (TEST-018); see `evidence/openrouter/live-inference-redacted.json`.
-- SCA, SAST, DAST and IaC scans were executed; raw outputs and reviewed findings are in `evidence/security/`. SCA reported zero advisories, Semgrep reported zero findings, Checkov completed with one documented false-positive skip, and ZAP completed with eight warning categories. See `evidence/security/scan-review.json`; these results do not mean zero security risk.
+- TEST-019 **PASS locally with reported findings**: pip/npm 0 advisories; Semgrep 23 files/0 findings; Checkov 294 passed/0 failed; ZAP 0 high, 0 low, 1 medium and 3 informational alert types. Actual ZAP exit **2** (warnings); JSON/HTML retained. Medium `img-src https:` preserves approved external product images and has a documented review/remediation. See `evidence/security/runs/20261011213538Z/summary.json` and `review.json`.
 - Historical local TEST-020/021 passed: Compose API and Web became healthy, Swagger and OpenAPI returned HTTP 200 on fixed test host ports. Dynamic-port verification is recorded separately in `evidence/dynamic-ports/`; discover the current URLs with `docker compose port`.
-- CI: `.github/workflows/ci.yml` includes tests, builds, scans and an image artifact. TEST-022 has not run because there is no GitHub remote or push yet (the verified state is committed locally).
+- CI baseline: [38157463221](https://github.com/ArthurMinovsky/ai-sales-support-hub/actions/runs/38157463221), commit `c9b5610`, all six jobs succeeded with an image archive. Its historical DAST artifact lacked usable reports. The new local fix collects nonroot ZAP reports, fails on missing reports/tool errors/high findings and gates release jobs on security. The modified workflow has **not** run on GitHub.
 
 More detailed procedures: `tests/verification/README.md`; evidence sources: `docs/verification/EVIDENCE-MATRIX.md`.
 
-For scanner runs, set `COMPOSE_PROJECT_NAME` to the running stack; `scripts/security/run-scans.sh` discovers Web/API host ports and verifies both before DAST. `DAST_TARGET` and `API_BASE_URL` support explicit target URLs. On Docker Desktop, the scanner can use the Compose network with `DAST_DOCKER_NETWORK=<project>_default` and `DAST_DOCKER_TARGET=http://web:3000`; on Linux its default host network reaches the discovered URL.
+For scanner runs, set `COMPOSE_PROJECT_NAME` to an isolated running stack; `scripts/security/run-scans.sh` discovers ports and verifies Web/API readiness before DAST. It creates a fresh `evidence/security/runs/<UTC timestamp>/` directory; `SECURITY_EVIDENCE_DIR` overrides it and `SECURITY_CATEGORIES=sca,sast,iac,dast` selects scope. On Docker Desktop use `DAST_DOCKER_NETWORK=<project>_default` and `DAST_DOCKER_TARGET=http://web:3000`. ZAP writes inside its own nonroot container, reports are copied before cleanup and raw scanner exits remain visible. Passive DAST does not authenticate CRUD routes.
 
 ## demonstration materials and constraints
 
 - `docs/presentation/PITCH.md` covers As Is/To Be, Architecture, System Features, User Stories and UI Flow in <=10 minutes. Rehearsal pending.
 - The app is designed for a single-host small catalog; no enterprise RBAC, RAG/vector DB or full analytics dashboard.
-- There is no GitHub repository URL or live OpenRouter key. TEST-025 pitch rehearsal and TEST-026 reviewer acceptance remain pending. Local Compose verification is not external hosting.
+- Public source: [ArthurMinovsky/ai-sales-support-hub](https://github.com/ArthurMinovsky/ai-sales-support-hub). A securely configured key was used for the retained TEST-018 record. Independent review, TEST-025 rehearsal and TEST-026 acceptance remain pending.
 
 ## Project governance
 

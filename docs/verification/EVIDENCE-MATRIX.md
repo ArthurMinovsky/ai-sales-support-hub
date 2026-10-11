@@ -1,25 +1,30 @@
-# Outcome Evidence Matrix — Current Implementation Verification
+# Outcome Evidence Matrix — Recorded Verification
 
-**Recorded:** 2026-10-11T13:59:12Z  
-**Source revision:** branch main, no commit or remote configured; implementation/test-inputs SHA-256 30ec1aa74c28dd316c4c7605c101c3ee77db390f2b113ad2984d78d97071814a (excludes README, walkthrough/evidence outputs, generated build/test files and caches).  
-**Approved contracts:** hashes remain equal to the values in docs/instructions/HANDOFF.md.
+**Updated:** 12 October 2026, Asia/Bangkok.
 
-| Outcome | Status | Evidence | Limits / blockers |
+**Source:** main, baseline `c9b5610ddf23bfc04749455512f4d4d891089162` plus uncommitted TEST-019 fixes.
+**Executed snapshot digest:** `67ba389c857e95307e0d01c0e67a58219abf11b1019f039f386925e01310cd2f`, before later reporting edits; exact tested code hashes are in the new summary. All 15 protected contract/plan hashes matched HANDOFF.
+
+| Outcome | Evidence state | Actual proof | Limits |
 |---|---|---|---|
-| OUT-001 | BLOCKED | Mocked known-catalog suggestion tests passed: TEST-011 and TEST-016; Playwright report at evidence/frontend/playwright-report/. | TEST-018 requires one real OpenRouter inference. No API key was provided; mocked output is not live-provider proof. |
-| OUT-002 | BLOCKED | Swagger /docs and /openapi.json returned HTTP 200 (TEST-021); endpoint authorization schema was inspected. | Real OpenRouter inference evidence for TEST-018 is missing. |
-| OUT-003 | VERIFIED | Pytest auth/JWT/protected-route/CRUD/persistence cases and Playwright registration, login, logout and catalog journeys passed. TEST-006 Origin control returned 403 for the disallowed origin and 201 for the configured origin. | Local test fixtures remain in the SQLite volume. |
-| OUT-004 | VERIFIED | evidence/backend/pytest-results-final.xml: 10 passed. web/test-results/.last-run.json: passed, no failed tests; Playwright HTML report contains 4 passed browser tests. | Browser tests used the isolated mock OpenRouter service for deterministic AI journeys. |
-| OUT-005 | BLOCKED | TEST-020 local Compose build/start/readiness passed; API and Web containers are healthy. TEST-019 ran SCA, SAST, DAST and IaC scans; see evidence/security/triage-summary.json and scanner reports. | TEST-022 GitHub Actions run is blocked: there is no Git remote or commit. DAST reported security-header warnings; see evidence/security/scan-review.json. |
-| OUT-006 | BLOCKED | README and 10-minute pitch draft are present. | No Git repository URL; TEST-025 walkthrough has not been rehearsed or approved. |
-| OUT-007 | VERIFIED | Invalid/expired token, product validation, provider failure, allowlist and secrets cases passed in Pytest/E2E. Runtime OpenRouter key is empty, and the plain local deployment has no mock-provider container. | DAST header warnings remain reported; no claim of zero security risk. |
-| OUT-008 | BLOCKED | This matrix and raw test/scan reports are tied to the working-tree fingerprint above. | TEST-026 user acceptance remains pending the required walkthrough, local commit, independent review and post-review user decision. |
+| OUT-001/002 | Local automated evidence available | Recommendation checks, Swagger readiness and separate real OpenRouter HTTP 200 record in `evidence/openrouter/live-inference-redacted.json`. | No fresh live-provider call in this security run. |
+| OUT-003 | Automated behavior executed | Backend 11/11 and container browser 17/17: auth, CRUD, suggestions, origin policy and CSP. | Executed checks do not establish every manual contract subcondition. |
+| OUT-004 | Test evidence available | New run's `pytest-regression.xml`, `playwright-final.json`; evaluator 10/10, TypeScript and Web build exit 0. | Browser AI uses an isolated mock provider. |
+| OUT-005 | TEST-019 local PASS; baseline CI succeeded | Four actual scans, complete reports/exits/review and cleanup in new `summary.json`. CI baseline run 38157463221: six jobs/image archive. | New workflow has not run remotely; baseline DAST report retention was incomplete. |
+| OUT-006 | Materials/source available | Public repository, README, PITCH, WALKTHROUGH, EXAM_APPENDIX. | TEST-025 rehearsal pending. |
+| OUT-007 | Bounded security checks executed | Production nonce CSP; SCA/SAST/IaC clear; passive DAST has no high/low alerts. | One medium HTTPS image-source warning reviewed; no zero-risk/authenticated-DAST claim. |
+| OUT-008 | Traceable evidence available | Tested code/report hashes, versions, targets, exits and teardown in new run folder. | Independent review and TEST-026 User acceptance pending. |
 
-## Executed test summary
+## TEST-019 checkpoint
 
-- **PASS:** Pytest 10/10; Playwright 4/4; local Compose API /health, Web /login, Swagger /docs, and /openapi.json all returned HTTP 200.
-- **PASS:** SQLite named-volume persistence across docker compose down without -v and up --build -d; volume saleshub-implementation-check_app_data remained mounted at /data, and product ID 4 remained present.
-- **EXECUTED WITH REPORTED FINDINGS:** SCA, SAST, DAST and IaC. All final scanner command exit codes are 0; ZAP warnings and the one Checkov false-positive skip are recorded, not described as vulnerability clearance.
-- **BLOCKED:** TEST-018 live OpenRouter, TEST-022 remote CI, TEST-025 manual rehearsal and TEST-026 manual acceptance.
+- **SCA:** pip-audit 2.10.1, 66 dependency entries/0 vulnerabilities; npm 11.19.0, 0 advisories; exits 0. Editable local package is not auditable through PyPI.
+- **SAST:** Semgrep 1.180.0, 23 files with three configured Python rules, 0 findings/errors; exit 0.
+- **IaC:** Checkov 3.3.27, 118 Dockerfile + 176 workflow checks passed, 0 failed/parsing errors/skips in this scope; exit 0.
+- **DAST:** ZAP 2.17.0, actual exit **2** (warnings), 0 high/0 low/1 medium/3 informational alert types. JSON 15,752 bytes and HTML 49,587 bytes retained. Medium `img-src https:` preserves approved external product images; future image-host restrictions require an approved contract change. Reviewed in `review.json`.
+- **Preservation:** fixture containers removed without `-v`; named volume remains. Main API container and SQLite hash unchanged (2 users/10 products/integrity OK). Main Web refreshed to tested image; 2/2 security checks passed.
 
-The Web port is http://localhost:3001 because an unrelated service already occupies host port 3000. API: http://localhost:8000; Swagger: http://localhost:8000/docs. Do not commit secrets or infer external deployment from this local Compose run.
+Evidence: `evidence/security/runs/20261011213538Z/summary.json`, `review.json`, `execution-ledger.json`, `final-scans/`.
+
+Local Web **http://localhost:55016**; API **http://localhost:55011**; Swagger **http://localhost:55011/docs**. Rediscover ports with `./scripts/status.sh`.
+
+[CI baseline 38157463221](https://github.com/ArthurMinovsky/ai-sales-support-hub/actions/runs/38157463221) verifies committed `c9b5610`, not new changes. No external hosting or manual acceptance is claimed. Historical no-key/no-remote, 10/4-test and fixed-port summaries are superseded; raw records are preserved.
