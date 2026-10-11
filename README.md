@@ -2,7 +2,7 @@
 
 A small, demo-oriented product catalog and AI recommendation workspace for Sales Support Hub's Forward Deployed AI Engineer project.
 
-> **Source status:** Backend tests (10/10), browser tests (4/4), TypeScript checks, reproducible npm installation, Docker image builds, local Compose readiness and all four scanner categories have been executed. Live OpenRouter inference, GitHub Actions, external hosting and manual acceptance remain blocked or pending. See the evidence matrix for exact scope and findings.
+> **Source status:** Backend tests (11/11), browser tests (15/15), TypeScript checks, reproducible npm installation, Docker image builds, local Compose readiness, all four scanner categories and a redacted live OpenRouter inference have been executed. GitHub Actions, external hosting and manual acceptance remain pending. See the evidence matrix for exact scope and findings.
 
 ## Stack and features
 
@@ -20,16 +20,20 @@ A small, demo-oriented product catalog and AI recommendation workspace for Sales
 2. Start both services with **one command**:
 
    ```sh
-   docker compose up --build
+   docker compose -p saleshub-implementation-check up -d --build
    ```
 
-3. Docker allocates an unused host port for Web and API. Discover the URLs after startup:
+3. Docker automatically allocates an unused host port for Web and API — no fixed port to collide with anything else on the machine. Get the current URLs with one command:
 
    ```sh
-   web_port="$(docker compose port --index 1 web 3000 | sed -n '1s/.*://p')"
-   api_port="$(docker compose port --index 1 api 8000 | sed -n '1s/.*://p')"
-   printf 'Web: http://localhost:%s\nSwagger: http://localhost:%s/docs\n' "$web_port" "$api_port"
-   curl -fsS "http://localhost:$api_port/health"
+   ./scripts/status.sh
+   ```
+
+   Or discover them manually:
+
+   ```sh
+   docker compose -p saleshub-implementation-check port --index 1 web 3000
+   docker compose -p saleshub-implementation-check port --index 1 api 8000
    ```
 
 TEST-010 verified user and product persistence across `docker compose down` (without `-v`) and re-up. The evidence records the named volume and persisted product. **Never run `docker compose down -v` on data you wish to retain.**
@@ -58,12 +62,12 @@ Swagger login returns an access token for direct API testing; the browser does n
 
 ## Verification / security status
 
-- Backend command: `cd backend && pip install -e '.[test]' && pytest -q`. Latest run: 10 passed; XML is in `evidence/backend/pytest-results-final.xml`.
-- Frontend commands: `cd web && npm ci && npm run typecheck && npm run build`. Start an isolated fixture with `docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-e2e up --build -d`, then run `COMPOSE_PROJECT_NAME=saleshub-e2e npm run test:e2e` from `web/`; Playwright discovers its published Web port. `PLAYWRIGHT_BASE_URL` can override discovery for an existing test target. Historical run: 4 passed; see `evidence/frontend/playwright-execution.json` and `evidence/frontend/playwright-report/`.
-- Mock OpenRouter in E2E verifies deterministic UI/error behavior only. It does not satisfy TEST-018. The live provider check remains blocked until a valid key is securely configured.
+- Backend command: `cd backend && pip install -e '.[test]' && pytest -q`. Latest run: 11 passed; XML is in `evidence/backend/pytest-results-post-origin-fix.xml`.
+- Frontend commands: `cd web && npm ci && npm run typecheck && npm run build`. Start an isolated fixture with `docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-e2e up --build -d`, then run `COMPOSE_PROJECT_NAME=saleshub-e2e npm run test:e2e` from `web/`; Playwright discovers its published Web port. `PLAYWRIGHT_BASE_URL` can override discovery for an existing test target. Final run: 15 passed (4 journeys + origin-policy suite); see `evidence/frontend/playwright-execution.json` and `evidence/frontend/playwright-report/`.
+- Mock OpenRouter in E2E verifies deterministic UI/error behavior only. A real, redacted live provider inference also passed (TEST-018); see `evidence/openrouter/live-inference-redacted.json`.
 - SCA, SAST, DAST and IaC scans were executed; raw outputs and reviewed findings are in `evidence/security/`. SCA reported zero advisories, Semgrep reported zero findings, Checkov completed with one documented false-positive skip, and ZAP completed with eight warning categories. See `evidence/security/scan-review.json`; these results do not mean zero security risk.
 - Historical local TEST-020/021 passed: Compose API and Web became healthy, Swagger and OpenAPI returned HTTP 200 on fixed test host ports. Dynamic-port verification is recorded separately in `evidence/dynamic-ports/`; discover the current URLs with `docker compose port`.
-- CI: `.github/workflows/ci.yml` includes tests, builds, scans and an image artifact. TEST-022 has not run because this local Git repository has no commit or remote.
+- CI: `.github/workflows/ci.yml` includes tests, builds, scans and an image artifact. TEST-022 has not run because there is no GitHub remote or push yet (the verified state is committed locally).
 
 More detailed procedures: `tests/verification/README.md`; evidence sources: `docs/verification/EVIDENCE-MATRIX.md`.
 
