@@ -14,13 +14,13 @@ A small, demo-oriented product catalog and AI recommendation workspace for Sales
 
 ## One-command Docker deployment
 
-**Prerequisites:** Docker Engine with Docker Compose v2, OpenSSL, and network access for pulling images/dependencies. Run this single line in a terminal; it clones the repository, creates a private local `.env` with a random JWT signing key, builds both Docker images, starts both containers, and waits for them to become healthy:
+**Prerequisites:** Docker Engine with Docker Compose v2, OpenSSL, and network access for pulling images/dependencies. Run this single line in a terminal; it clones the repository, creates a private local `.env` with a random JWT signing key, builds both Docker images, starts both containers, waits for them to become healthy, and prints the dynamically assigned Web, API, and Swagger URLs:
 
 ```sh
-git clone https://github.com/ArthurMinovsky/ai-sales-support-hub.git && cd ai-sales-support-hub && (umask 077; printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" > .env) && docker compose up --build -d --wait --wait-timeout 180
+git clone https://github.com/ArthurMinovsky/ai-sales-support-hub.git && cd ai-sales-support-hub && (umask 077; printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" > .env) && export COMPOSE_PROJECT_NAME=saleshub-implementation-check && docker compose up --build -d --wait --wait-timeout 180 && ./scripts/status.sh
 ```
 
-Docker assigns free host ports when it creates the containers. For the same build/start with the actual Web, API, and Swagger URLs printed automatically, run `./start` from the cloned repository; that optional host-shell wrapper calls `docker compose up --build`, waits for healthy services, then reports the allocated ports. Direct Compose remains available at any time: `docker compose up --build -d`; to start an already-built stack use `docker compose up -d`. To inspect an existing stack's assigned ports, run `docker compose port web 3000` and `docker compose port api 8000`. An optional `COMPOSE_PROJECT_NAME` selects a different isolated stack.
+Docker assigns free host ports when it creates the containers. The command above sets the project name expected by `scripts/status.sh`, then prints the actual Web, API, and Swagger URLs after startup. For the same build/start with automatic URL reporting, run `./start` from the cloned repository; that optional host-shell wrapper calls `docker compose up --build`, waits for healthy services, then reports the allocated ports. Direct Compose remains available at any time: `docker compose up --build -d`; to start an already-built stack use `docker compose up -d`. To inspect an existing stack's assigned ports, run `docker compose port web 3000` and `docker compose port api 8000`. An optional `COMPOSE_PROJECT_NAME` selects a different isolated stack.
 
 OpenRouter is optional for starting the Web app and catalog CRUD. To enable live AI inference, add `OPENROUTER_API_KEY` to the ignored local `.env` before starting the stack.
 TEST-010 verified user and product persistence across `docker compose down` (without `-v`) and re-up. The evidence records the named volume and persisted product. **Never run `docker compose down -v` on data you wish to retain.**

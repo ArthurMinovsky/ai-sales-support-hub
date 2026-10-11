@@ -1,0 +1,34 @@
+[
+  {
+    "label": "saleshub-implementation-check-database-0",
+    "command": [
+      "docker",
+      "exec",
+      "saleshub-implementation-check-api-1",
+      "python",
+      "-c",
+      "import sqlite3,json,hashlib\nc=sqlite3.connect('file:/data/app.db?mode=ro',uri=True)\nresult={}\nfor name in ('users','products'):\n rows=c.execute('SELECT * FROM '+name+' ORDER BY id').fetchall()\n result[name]={'count':len(rows),'sha256':hashlib.sha256(json.dumps(rows,default=str).encode()).hexdigest()}\nprint(json.dumps(result))\n"
+    ],
+    "started_at": "2026-10-11T21:16:31.703563+00:00",
+    "exit_code": 0
+  },
+  {
+    "label": "plain-build-start",
+    "command": [
+      "docker",
+      "compose",
+      "-p",
+      "saleshub-implementation-check",
+      "-f",
+      "compose.yaml",
+      "up",
+      "--build",
+      "-d",
+      "--wait",
+      "--wait-timeout",
+      "180"
+    ],
+    "started_at": "2026-10-11T21:16:31.790313+00:00",
+    "exit_code": 1
+  }
+]

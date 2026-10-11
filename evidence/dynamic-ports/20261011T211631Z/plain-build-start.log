@@ -1,0 +1,4 @@
+ Image saleshub-implementation-check-web Building 
+ Image saleshub-implementation-check-api Building 
+failed to update builder last activity time: open /Users/aminovsky/.docker/buildx/activity/.tmp-default3182872076: operation not permitted
+
