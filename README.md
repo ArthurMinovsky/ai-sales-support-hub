@@ -88,12 +88,6 @@ More detailed procedures: `tests/verification/README.md`; evidence sources: `doc
 
 For scanner runs, set `COMPOSE_PROJECT_NAME` to an isolated running stack; `scripts/security/run-scans.sh` discovers ports and verifies Web/API readiness before DAST. It creates a fresh `evidence/security/runs/<UTC timestamp>/` directory; `SECURITY_EVIDENCE_DIR` overrides it and `SECURITY_CATEGORIES=sca,sast,iac,dast` selects scope. On Docker Desktop use `DAST_DOCKER_NETWORK=<project>_default` and `DAST_DOCKER_TARGET=http://web:3000`. ZAP writes inside its own nonroot container, reports are copied before cleanup and raw scanner exits remain visible. Passive DAST does not authenticate CRUD routes.
 
-## demonstration materials and constraints
-
-- The local ignored pitch notes cover As Is/To Be, Architecture, System Features, User Stories and UI Flow in <=10 minutes; the notes are intentionally excluded from the public repo. TEST-025 rehearsal and TEST-026 reviewer acceptance are user-confirmed PASS. Independent code review and external hosting remain pending.
-- The app is designed for a single-host small catalog; no enterprise RBAC, RAG/vector DB or full analytics dashboard.
-- Public source: [ArthurMinovsky/ai-sales-support-hub](https://github.com/ArthurMinovsky/ai-sales-support-hub). A securely configured key was used for the retained TEST-018 record. TEST-025 and TEST-026 are user-confirmed PASS; independent code review and external hosting remain pending.
-
 ## Project governance
 
 `docs/instructions/` contains the approved OUTCOME, CONSTITUTION, PRD, ARCHITECTURE pair, TEST and PLAN-001..009 contracts (source hashes in HANDOFF). Approved document headers may retain historical PROPOSAL language; the separate User decision is authoritative. Code changes, tests, builds, commits and publication have independent gates.
