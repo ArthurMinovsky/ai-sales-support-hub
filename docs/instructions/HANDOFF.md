@@ -1,18 +1,17 @@
 # HANDOFF — AI Sales Support Hub
-> Lifecycle state: `INITIAL_SOURCE_DRAFT_PREPARED` (initial source in ChatGPT artifact workspace; untested and not in a User Git repository)
-> Last reviewed: 2026-10-11, Asia/Bangkok. This is a ChatGPT artifact workspace copy, **not** the User computer or a live Git repository.
+> Lifecycle state: `LOCAL_FULL_VERIFICATION_COMPLETE` (all 68 paths implemented and verified; tests, scans, live OpenRouter and realism upgrade executed; state committed locally on `main`; no remote/CI yet)
+> Last reviewed: 2026-10-11 (evening), Asia/Bangkok. Now on the User's Mac at `/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub` (Git repository, branch `main`, local commits only).
 
 ## 1. Objective / source of authority
 Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagger + OpenRouter; Next.js + TypeScript registration/login, 3600s JWT and protected product CRUD/search; Pytest/Playwright; Git/CI, Compose one-command and SCA/SAST/DAST/IaC with evidence; reviewer documentation and 10-minute pitch. Employer project is the three-page `ข้อสอบ.pdf`; governing meanings are the approved contract files listed below.
 
 ## 2. Harness, destination and ownership
-- **Harness:** ChatGPT conversation artifact workspace (inferred from review workflow; no user-local path assertion).
-- **User-local project path:** `N/A` / not chosen. No Git repository URL supplied; no Git init, push, Docker execution, package installation or code mutation has occurred.
-- **Lifecycle directory within downloadable proposed project:** `docs/instructions/`.
-- **Review fixed point:** `NEW_PROJECT_NOT_YET_CREATED`; no initial Git commit and no review SHA.
-- **Single active planning owner:** ChatGPT assistant; no parallel writer/worktree or reviewer has been dispatched.
-- **ClickUp tracking:** Connected ClickUp metadata search for `Sales Support Hub` returned zero matching tasks on 2026-10-11. No card created; ID/URL = `NOT_LINKED`, awaiting User confirmation of an appropriate List/card or permission to create a new task. This does not confer execution authority.
-- **Outstanding resources:** OPENROUTER_API_KEY is User-provided only at secure runtime configuration. No key present in artifacts. Repo URL/remote credentials and live provider invocation are unavailable.
+- **Harness:** opencode on the User's Mac (Codex desktop session 01a12aec-97b1-7141-8900-6788f191c912 performed the earlier verification work; opencode continued it).
+- **User-local project path:** `/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub`.
+- **Git state:** initialized on `main` with local commits only (no remote, no push). Commit chain: `54fa34b` (initial fully verified implementation) → `662e51b` (TEST-018 live OpenRouter verification) → `017db6a` (dynamic-port URL discovery helper + README) → `093b5de` (realism upgrade: catalog, UI, test data).
+- **Lifecycle directory within project:** `docs/instructions/`.
+- **ClickUp tracking:** still `NOT_LINKED` (searched 2026-10-11; no matching task; no card created).
+- **Outstanding resources:** OPENROUTER_API_KEY and JWT_SECRET now exist only in the local gitignored `.env` (key User-provided at runtime; never committed or logged). Repo remote URL/credentials remain unavailable, so TEST-022 (real GitHub Actions run) is still pending.
 
 ## 3. Approval record / immutable contracts
 - On 2026-10-11 User explicitly approved `PLAN-001..004 R2`, `PLAN-006..008 R2` and directed transition to HANDOFF and *separate* Initial Source Create Batch approval.
@@ -43,13 +42,18 @@ Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagg
 - [x] Verify R2 plan hashes and User approval statement.
 - [x] Copy nine plans into the canonical approved plan directory exactly once.
 - [x] Enumerate 68 distinct proposed `CREATE` paths from all nine plans; resolve five multi-plan shared files to one final owner.
-- [ ] Prepare complete exact **source AND executable test file contents** in a review-only staging bundle, including a coherent lockfile, and calculate per-file SHA-256.
-- [ ] Review the resulting full initial source/test bundle and its exact 68-path change-action map with the User.
-- [ ] Request **separate explicit User permission** to create the exact named full initial source batch, with its reviewed file digests and IDs. Plan approval alone is insufficient.
-- [ ] Only then create the exact approved initial source files in the authorized project root or chat deliverable project staging as chosen by the User.
-- [ ] Separately request User approval before each Plan’s linked Core Automated TEST execution.
-- [ ] Collect actual evidence; if Core fix required request new edit permission; no claimed test success before execution.
-- [ ] Present Walkthrough, request User approval, then permissioned local commit, independent review, User post-review decision, and Manual Tests.
+- [x] Prepare complete exact **source AND executable test file contents** and per-file SHA-256 (delivered in `ai-sales-support-hub-source-manifest-r1.json`).
+- [x] Review the resulting full initial source/test bundle and its exact 68-path change-action map with the User.
+- [x] User permission granted (Fast Mode authorization, 2026-10-11) for the scoped local edits, builds, tests and debug loop.
+- [x] Create the exact approved initial source files in the authorized project root.
+- [x] Resolve the full npm lockfile; Docker/CI use `npm ci` (reproducibility gap closed).
+- [x] Execute all Core automated tests with real evidence: Pytest 11/11, Playwright 15/15 (incl. origin-policy suite), persistence TEST-010, Compose smoke TEST-020/021.
+- [x] Execute the four security scans (SCA/SAST/IaC/DAST) with retained reports and zero unresolved findings (Checkov 294/0 after the workflow-level permissions fix and documented CKV_SECRET_6 false-positive skips).
+- [x] TEST-018 live OpenRouter inference PASS with redacted evidence (model `nvidia/nemotron-3-super-120b-a12b:free`).
+- [x] Realism upgrade executed per approved `saleshub-realism_plan.md` (10-product Sales Support Hub-style catalog, professional self-contained UI, realistic test data).
+- [x] Local Git commits of the verified state (see §2 chain).
+- [ ] Present Walkthrough to User, obtain approval, then permissioned push to a remote and CI execution (TEST-022).
+- [ ] Independent review and post-review User decision; then Manual TEST-025/026 acceptance.
 
 ## 5. Dependency/execution graph and shared writers
 - First integrated create: all paths in `review/INITIAL_SOURCE_CREATE_BATCH_manifest.json`, one write each, after explicit batch approval. Contents must combine all approved Plan contributions.
@@ -59,26 +63,38 @@ Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagg
 - Shared path owners: PLAN-001 `backend/app/main.py`, `web/package.json`, `web/package-lock.json`; PLAN-002 `backend/app/api/routes/products.py`, `backend/tests/conftest.py`.
 
 ## 6. Quality / safety gates and blockers
-- `TEST-010`: named-volume restart without `docker compose down -v`; save persistence evidence after teardown.
-- `TEST-018`: at least one real OpenRouter HTTPS inference; mocked response does not satisfy this gate. Await key and specific Core test execution permission.
-- `TEST-019`: four **executed** security scans with recorded target/severity/exit/report. ZAP baseline needs live readiness-verified Compose target, saved reports and test-owned cleanup.
-- `TEST-020`: Docker build, Web/API readiness from one command in clean documented environment.
-- `TEST-022`: actual GitHub Actions run and retained image/build artifact; CI YAML alone is not evidence.
-- `TEST-025/026`: Manual Outcome acceptance by User after later code review.
-- No user-local repository path, remote Git URL, ClickUp Task ID, OpenRouter runtime credentials or CI run yet. Do not infer them.
+- `TEST-010`: **PASS** — named-volume restart without `docker compose down -v`, re-proven twice (latest after the realism rebuild). Evidence: `evidence/docker/persistence.json`.
+- `TEST-018`: **PASS** — at least one real OpenRouter HTTPS inference executed (twice: pre- and post-realism) with redacted evidence. Evidence: `evidence/openrouter/live-inference-redacted.json`.
+- `TEST-019`: **PASS** — four executed security scans with recorded target/severity/exit/report and test-owned cleanup. Evidence: `evidence/security/`.
+- `TEST-020`: **PASS** — Docker build, Web/API readiness from one command (`docker compose -p saleshub-implementation-check up --build -d`), dynamic host ports. Evidence: `evidence/docker/smoke.json`.
+- `TEST-022`: **PENDING** — actual GitHub Actions run and retained image/build artifact; CI YAML alone is not evidence. Requires an authorized remote and push; no remote exists yet.
+- `TEST-025/026`: **PENDING** — Manual Outcome acceptance by User after code review and the walkthrough gate.
+- Remaining external blockers: Git remote/credentials, ClickUp task link, User walkthrough approval. Do not infer or fabricate any of them.
 
 ## 7. Current state → evidence → next gate → blockers
-`INITIAL_SOURCE_BATCH_PREPARATION` → approved source hashes and exactly 68-path inventory in this handoff → prepare COMPLETE source+test content in a standalone review-only bundle, then **separate** `CORE_PERMISSION_REQUIRED` mutation request with exact hashes → blockers: source bytes not drafted/tested, target Git repository/harness confirmation, unavailable live key/CI during later stages, unlinked ClickUp card.
+`LOCAL_FULL_VERIFICATION_COMPLETE` → evidence in `evidence/` (backend pytest JUnit XML; Playwright execution record + HTML report; docker smoke + persistence records; security scan reports + scan-review + triage; redacted live-inference record; dynamic-port worker logs) and live local Compose stack (project `saleshub-implementation-check`, Docker-allocated dynamic ports, discover with `./scripts/status.sh`) → next gate: **User walkthrough approval, then remote push + GitHub Actions run (TEST-022), independent review, and Manual TEST-025/026** → blockers: no Git remote/credentials; ClickUp card still unlinked; TEST-022 cannot be satisfied locally.
 
 ## 8. Receiving harness instructions
-Before any mutation read all approved files in `docs/instructions/`, check SHA-256 with `review/APPROVED_REVISION_MANIFEST.json`, verify Architecture pair, inspect `INITIAL_SOURCE_CREATE_BATCH_manifest.json`, resolve root/ownership and check competing worktree ownership. A previously approved Plan does not grant permission to write source or run tests.
+Before any further mutation, read the approved files in `docs/instructions/` (hashes unchanged in the table above), inspect `git log`/`git status` for the current commit chain, and verify the local stack with `./scripts/status.sh`. `.env` is gitignored and holds the only secrets (JWT_SECRET, User-provided OPENROUTER_API_KEY) — never commit, print or log them. The E2E fixture stack (`compose.yaml` + `compose.e2e.yaml`, project `saleshub-e2e`) is separate from the hosting stack; tear it down after test runs. Docker volumes were reset during the realism upgrade; the 10-product catalog seeds automatically on first start.
 
 
-## 9. Source creation update — user instruction to implement until before tests
-- On 2026-10-11 User requested implementation until immediately before the TEST stage. All approved 68 planned source paths were authored in this ChatGPT artifact workspace and included with approved documentation for review/export.
-- No unit/e2e tests, builds, container starts, CI jobs, security scans, real OpenRouter calls, Git commits or pushes were executed during this stage. Configuration and test source files are present, not verified.
-- `web/package-lock.json` contains direct dependency metadata only: npm registry resolution timed out. Docker and CI temporarily use `npm install` rather than `npm ci`; resolve a full dependency lock in a permitted pre-test environment before claiming reproducibility. Do not mark PLAN-001 / TEST-020 as fully verified.
-- Source/content SHA-256 map and file ownership are recorded in the separate `ai-sales-support-hub-source-manifest-r1.json` delivered with the archive (not inside protected contracts).
-- Next authority gate: User must separately approve execution of each Plan's linked Core automated tests/build checks. An initial static file inventory check is not a unit/integration/system test.
-- ClickUp task search did not find a matching entry; no task created. No Git repo URL given. No live OpenRouter key provided.
-- Because this is a chat artifact workspace rather than the user's live repository, treating the ZIP as the draft source handoff is not equivalent to a Git commit or publication.
+## 9. Source creation update — historical record (superseded)
+> This section is retained as the historical record of the ChatGPT authoring stage; it no longer describes the current state. See §10 for what has since been executed and verified.
+
+- On 2026-10-11 User requested implementation until immediately before the TEST stage. All approved 68 planned source paths were authored in the ChatGPT artifact workspace and exported with the approved documentation.
+- No unit/e2e tests, builds, container starts, CI jobs, security scans, real OpenRouter calls, Git commits or pushes were executed **during that stage**.
+- Source/content SHA-256 map and file ownership are recorded in `ai-sales-support-hub-source-manifest-r1.json` (delivered with the archive, not inside protected contracts).
+- The lockfile gap and all "not verified" statements in this section were resolved later — see §10.
+
+## 10. Local verification execution record (2026-10-11, evening)
+Executed under the User's Fast Mode authorization and subsequent explicit approvals, on the User's Mac, in the project directory listed in §2:
+
+- **Dependency repair:** `web/package-lock.json` fully resolved (1,109 lines); Dockerfile, CI and verification recipe switched to `npm ci`; scoped PostCSS 8.5.23 override over Next.js 15.5.27 (npm audit zero advisories).
+- **Tests:** backend Pytest **11/11** (final: `evidence/backend/pytest-results-post-origin-fix.xml`, realism rerun `pytest-results-realism.xml`); Playwright browser suite **15/15** on the rebuilt fixture stack (4 journeys + full origin-policy/BFF suite; `evidence/frontend/playwright-execution.json`); TypeScript typecheck and Next production build pass.
+- **Docker:** one-command `docker compose -p saleshub-implementation-check up --build -d` starts both services healthy; dynamic host ports (`API_PORT=0`/`WEB_PORT=0`) with an origin check that validates the actual request Host/port (red→green evidence in `evidence/dynamic-ports/`); `scripts/status.sh` prints live URLs; TEST-010 persistence re-proven twice, including after the realism rebuild.
+- **Security:** SCA (pip-audit 66 deps/0 vulns; npm audit 0), SAST (Semgrep 0 findings), IaC (Checkov 294 passed/0 failed — workflow-level `permissions: contents: read` added for CKV_GHA_7; CKV_SECRET_6 false-positive skips documented on both runtime-generated CI JWT lines), DAST (ZAP baseline exit 0). Reports and review: `evidence/security/`.
+- **TEST-018:** live OpenRouter HTTPS inference PASS, twice (pre- and post-realism): model `nvidia/nemotron-3-super-120b-a12b:free`, HTTP 200, catalog-grounded suggestions; redacted record at `evidence/openrouter/live-inference-redacted.json`.
+- **Realism upgrade (approved `saleshub-realism_plan.md`):** 10 realistic fictional Sales Support Hub-style products (Demo Sensors/Demo Automation families), professional UI with inline SVG icons and self-contained system fonts (Google Fonts CDN dependency removed), realistic test data; schema/API/selectors unchanged; volumes intentionally reset; demo user `nattapong.s` registered.
+- **Fixes verified along the way (root causes in `WALKTHROUGH.html`):** lockfile metadata gap, Next standalone binding, suggestion validator boundary, test-domain email fixtures, selector races, stale scanner markers, hard-coded CI demo JWTs (now runtime-generated), dynamic-port origin rejection, missing workflow permissions.
+- **Git:** local commit chain in §2; working tree clean; `.env` and runtime evidence folders gitignored; `evidence/dynamic-ports/` and `evidence/openrouter/` intentionally tracked.
+- **Still pending:** User walkthrough approval, remote push + GitHub Actions run (TEST-022), independent review, Manual TEST-025/026, 10-minute pitch rehearsal.
