@@ -2,12 +2,12 @@
 
 A small, demo-oriented product catalog and AI recommendation workspace for Sales Support Hub's Forward Deployed AI Engineer project.
 
-> **Source status:** Backend tests (11/11), browser tests (15/15), TypeScript checks, reproducible npm installation, Docker image builds, local Compose readiness, all four scanner categories and a redacted live OpenRouter inference have been executed. GitHub Actions, external hosting and manual acceptance remain pending. See the evidence matrix for exact scope and findings.
+> **Source status:** Backend tests (11/11), browser tests (15/15), TypeScript checks, reproducible npm installation, Docker image builds, local Compose readiness, all four scanner categories and a redacted live OpenRouter inference have been executed — most recently against the realism-upgraded source (realistic 10-product catalog, professional UI). GitHub Actions, external hosting and manual acceptance remain pending. See the evidence matrix for exact scope and findings.
 
 ## Stack and features
 
 - Python FastAPI + Swagger at `/docs` with user registration/login, backend JWT verification (3600s) and Product CRUD.
-- SQLAlchemy and persistent named-volume SQLite database with three **fictional demo products**.
+- SQLAlchemy and persistent named-volume SQLite database seeded with **ten realistic fictional products** across Demo Sensors (VisionScan, VibeSense, ThermoNode, GateLink) and Demo Automation (FlowBridge, DocuMind, AssistDesk, PredictIQ) families. They are synthetic examples, not real offerings.
 - Authenticated `POST /api/suggestions`: lexical candidate shortlist → OpenRouter Chat Completions → strict catalog Product-ID allowlist. Missing/broken provider returns explicit `503 AI_UNAVAILABLE`, never fabricated AI success.
 - Next.js 15 TypeScript web, server-side BFF HttpOnly cookie, Origin checks on mutation requests, protected pages.
 - Pytest, Playwright, Docker Compose, GitHub Actions, four scanner configurations and evidence matrix prepared for separately authorized execution.
@@ -44,7 +44,7 @@ The browser's mutation Origin must match the actual request Host and scheme in d
 
 ## Suggested user walkthrough
 
-Register a new user (username/email/password 10+ chars) → Log in (one-hour JWT) → Manage Products (add/edit/delete) → Product Search (customer needs) → recommendation cards linked to known catalog IDs. Demo seed products are hypothetical; they are not Sales Support Hub's catalog.
+Register a new user (username/email/password 10+ chars) → Log in (one-hour JWT) → Manage Products (add/edit/delete) → Product Search (customer needs) → recommendation cards linked to known catalog IDs. The seed catalog is a realistic fictional Sales Support Hub-style product set; it is not Sales Support Hub's real catalog. The UI uses self-contained system fonts — no remote font or CDN requests.
 
 ## API endpoints
 

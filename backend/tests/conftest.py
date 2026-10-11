@@ -36,6 +36,6 @@ def auth(token):
 @pytest.fixture
 def example_product():
     return {
-        "name": "Demo Access Controller", "brand": "TestBrand", "description": "Controls secure industrial access with a redundant network link.",
-        "category": "Security", "type": "Gateway", "subtype": "Access", "image_url": "https://example.test/product.png"
+        "name": "GateLink GX-8 Protocol Converter", "brand": "Demo Sensors", "description": "DIN-rail protocol converter exposing legacy PLC registers as OPC UA and MQTT with TLS 1.3.",
+        "category": "Industrial IoT", "type": "Protocol Converter", "subtype": "Connectivity", "image_url": None
     }

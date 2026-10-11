@@ -13,7 +13,7 @@ class Handler(BaseHTTPRequestHandler):
         if "FORCE_PROVIDER_ERROR" in user_payload["customer_needs"]:
             self.send_response(429); self.end_headers(); return
         ids = [item["product_id"] for item in user_payload["candidate_products"]]
-        result = {"suggestions": [{"product_id": ids[0], "reason": "Catalog demo fixture matched a requested capability"}]} if ids else {"suggestions": []}
+        result = {"suggestions": [{"product_id": ids[0], "reason": "Matches the stated production-line requirement; the catalog candidate supports the requested capability."}]} if ids else {"suggestions": []}
         response = json.dumps({"choices": [{"message": {"content": json.dumps(result)}}]}).encode()
         self.send_response(200)
         self.send_header("Content-Type", "application/json")

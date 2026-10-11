@@ -24,14 +24,14 @@ export default function RegisterPage() {
     finally { setPending(false); }
   }
   return <main className="auth-bg"><div className="auth-card">
-    <div className="eyebrow">SALES SUPPORT HUB</div>
-    <h1>Create your account<span className="period">.</span></h1><p className="muted">Get started with your product workspace.</p>
+    <div className="eyebrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5 14 4.9v6.2L8 14.5 2 11.1V4.9L8 1.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg> Sales Support Hub · Sales Support Hub</div>
+    <h1>Create your account</h1><p className="muted sub">Get started with your product workspace.</p>
     <form onSubmit={submit} className="form-grid">
       <label>Username<input autoComplete="username" minLength={3} value={username} onChange={e=>setUsername(e.target.value)} required /></label>
       <label>Email<input type="email" autoComplete="email" value={email} onChange={e=>setEmail(e.target.value)} required /></label>
       <label>Password<input type="password" autoComplete="new-password" minLength={10} value={password} onChange={e=>setPassword(e.target.value)} required /><small className="muted">At least 10 characters.</small></label>
       {error && <p role="alert" className="error">{error}</p>}
-      <button className="primary" disabled={pending}>{pending ? "Creating…" : "Register →"}</button>
+      <button className="primary" disabled={pending}>{pending ? "Creating…" : "Register"}</button>
     </form><p className="muted lower">Already have an account? <Link href="/login">Sign in</Link></p>
   </div></main>;
 }

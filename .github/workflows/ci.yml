@@ -124,7 +124,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Configure demo session secret
-        run: printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" > .env
+        run: |
+          # checkov:skip=CKV_SECRET_6: CI JWT is generated at runtime; no hardcoded credential exists
+          printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" > .env
       - name: Boot healthy live app for ZAP
         run: docker compose -p saleshub-dast up --build -d
       - name: Discover Docker allocated host ports

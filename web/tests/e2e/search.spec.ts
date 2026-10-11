@@ -16,7 +16,7 @@ async function signedIn(page: Page) {
 
 test("recommendation shows only known catalog items and reasons", async ({ page }) => {
   await signedIn(page);
-  await page.getByLabel("What is your customer looking for?").fill("Industrial gateway for edge inference");
+  await page.getByLabel("What is your customer looking for?").fill("Edge vision gateway for production-line defect inspection");
   await page.getByRole("button", { name: /Find products/ }).click();
   await expect(page.getByRole("region", { name: "Recommended products" })).toBeVisible();
   await expect(page.getByText("Why it matches").first()).toBeVisible();
@@ -24,7 +24,7 @@ test("recommendation shows only known catalog items and reasons", async ({ page 
 
 test("OpenRouter fixture failure is shown honestly", async ({ page }) => {
   await signedIn(page);
-  await page.getByLabel("What is your customer looking for?").fill("FORCE_PROVIDER_ERROR gateway");
+  await page.getByLabel("What is your customer looking for?").fill("FORCE_PROVIDER_ERROR vision gateway");
   await page.getByRole("button", { name: /Find products/ }).click();
   await expect(page.getByRole("alert").filter({ hasText: "AI recommendations unavailable" })).toContainText("AI recommendations unavailable");
   await expect(page.getByRole("link", { name: /Manage Products/ })).toBeVisible();

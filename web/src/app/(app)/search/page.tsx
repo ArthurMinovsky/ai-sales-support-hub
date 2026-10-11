@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 import RecommendationResults from "@/components/RecommendationResults";
 import { apiRequest, SearchResponse } from "@/lib/api";
 
-const EXAMPLES = ["I need a rugged edge AI vision gateway for manufacturing", "We need equipment vibration and temperature monitoring", "Connect machine sensor data to our existing software"];
+const EXAMPLES = ["Rugged edge vision gateway for production-line defect inspection", "Wireless vibration monitoring for CNC machines and rotating equipment", "Connect PLC and historian data into our analytics platform"];
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<SearchResponse | null>(null);
@@ -17,10 +17,10 @@ export default function SearchPage() {
     finally { setLoading(false); }
   }
   return <div className="page-wrap">
-    <div className="page-header"><div><div className="eyebrow">AI-ASSISTED DISCOVERY</div><h1>Find the right product<span className="period">.</span></h1><p className="muted">Describe your customer&apos;s challenge. We&apos;ll match it with products from your catalog.</p></div><span className="demo-chip">CATALOG-GROUNDED AI</span></div>
-    <section className="search-hero"><div className="hero-label">✧ &nbsp; CUSTOMER REQUIREMENTS</div>
-      <form onSubmit={search} className="query-form"><label htmlFor="needs">What is your customer looking for?</label><textarea id="needs" rows={5} minLength={3} maxLength={1500} value={query} onChange={e=>setQuery(e.target.value)} placeholder="e.g. We need an industrial monitoring solution for predictive maintenance…" required />
-        <div className="actions end"><span className="muted">Describe requirements in your own words</span><button className="primary" type="submit" disabled={loading || query.trim().length < 3}>{loading ? "Analyzing…" : "Find products →"}</button></div>
+    <div className="page-header"><div><div className="eyebrow">AI-assisted discovery</div><h1>Find the right product</h1><p className="muted">Describe your customer&apos;s challenge. We&apos;ll match it with products from your catalog.</p></div></div>
+    <section className="search-hero"><div className="hero-label">Customer requirements</div>
+      <form onSubmit={search} className="query-form"><label htmlFor="needs">What is your customer looking for?</label><textarea id="needs" rows={5} minLength={3} maxLength={1500} value={query} onChange={e=>setQuery(e.target.value)} placeholder="e.g. We need predictive maintenance for motors and pumps at our Rayong plant…" required />
+        <div className="actions end"><span className="muted">Describe requirements in your own words</span><button className="primary" type="submit" disabled={loading || query.trim().length < 3}>{loading ? "Analyzing…" : "Find products"}</button></div>
       </form>
     </section>
     <div className="examples"><span className="muted">Try an example:</span>{EXAMPLES.map(example=><button key={example} className="example" onClick={()=>setQuery(example)} type="button">{example}</button>)}</div>
