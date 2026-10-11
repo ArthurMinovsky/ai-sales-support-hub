@@ -8,7 +8,8 @@ Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagg
 ## 2. Harness, destination and ownership
 - **Harness:** opencode on the User's Mac (Codex desktop session 01a12aec-97b1-7141-8900-6788f191c912 performed the earlier verification work; opencode continued it).
 - **User-local project path:** `/Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub`.
-- **Git state:** initialized on `main` with local commits only (no remote, no push). Commit chain: `54fa34b` (initial fully verified implementation) → `662e51b` (TEST-018 live OpenRouter verification) → `017db6a` (dynamic-port URL discovery helper + README) → `093b5de` (realism upgrade: catalog, UI, test data).
+- **Git state:** initialized on `main` with local commits only (no remote, no push). Commit chain: `54fa34b` (initial fully verified implementation) → `662e51b` (TEST-018 live OpenRouter verification) → `017db6a` (dynamic-port URL discovery helper + README) → `093b5de` (realism upgrade: catalog, UI, test data) → `3bbabc0` (HANDOFF state update) → `c323dd3` (remove CI workflow backup) → `a7e84a6` (CI scanner-venv fix).
+- **Remote:** `https://github.com/ArthurMinovsky/ai-sales-support-hub` (public, pushed; branch `main` in sync). GitHub Actions run 38157082971 = success, all 6 jobs, with retained image artifact — TEST-022 satisfied.
 - **Lifecycle directory within project:** `docs/instructions/`.
 - **ClickUp tracking:** still `NOT_LINKED` (searched 2026-10-11; no matching task; no card created).
 - **Outstanding resources:** OPENROUTER_API_KEY and JWT_SECRET now exist only in the local gitignored `.env` (key User-provided at runtime; never committed or logged). Repo remote URL/credentials remain unavailable, so TEST-022 (real GitHub Actions run) is still pending.
@@ -67,7 +68,7 @@ Build Sales Support Hub AI Sales Support Hub under OUT-001..008: FastAPI + Swagg
 - `TEST-018`: **PASS** — at least one real OpenRouter HTTPS inference executed (twice: pre- and post-realism) with redacted evidence. Evidence: `evidence/openrouter/live-inference-redacted.json`.
 - `TEST-019`: **PASS** — four executed security scans with recorded target/severity/exit/report and test-owned cleanup. Evidence: `evidence/security/`.
 - `TEST-020`: **PASS** — Docker build, Web/API readiness from one command (`docker compose -p saleshub-implementation-check up --build -d`), dynamic host ports. Evidence: `evidence/docker/smoke.json`.
-- `TEST-022`: **PENDING** — actual GitHub Actions run and retained image/build artifact; CI YAML alone is not evidence. Requires an authorized remote and push; no remote exists yet.
+- `TEST-022`: **PASS** — actual GitHub Actions run 38157082971 (success, all 6 jobs: backend, frontend, integration, sca_sast_iac, dast, release_image) with retained `docker-release-images` artifact (~162 MB). First pushed run failed only in the scanner-install step; root cause (joint pip resolution of backend + semgrep backtracking to a semgrep-core-requiring sdist) fixed by isolating semgrep/checkov in their own CI venv. Evidence: `evidence/ci/github-actions-run.json` + run URL.
 - `TEST-025/026`: **PENDING** — Manual Outcome acceptance by User after code review and the walkthrough gate.
 - Remaining external blockers: Git remote/credentials, ClickUp task link, User walkthrough approval. Do not infer or fabricate any of them.
 
@@ -97,4 +98,5 @@ Executed under the User's Fast Mode authorization and subsequent explicit approv
 - **Realism upgrade (approved `saleshub-realism_plan.md`):** 10 realistic fictional Sales Support Hub-style products (Demo Sensors/Demo Automation families), professional UI with inline SVG icons and self-contained system fonts (Google Fonts CDN dependency removed), realistic test data; schema/API/selectors unchanged; volumes intentionally reset; demo user `nattapong.s` registered.
 - **Fixes verified along the way (root causes in `WALKTHROUGH.html`):** lockfile metadata gap, Next standalone binding, suggestion validator boundary, test-domain email fixtures, selector races, stale scanner markers, hard-coded CI demo JWTs (now runtime-generated), dynamic-port origin rejection, missing workflow permissions.
 - **Git:** local commit chain in §2; working tree clean; `.env` and runtime evidence folders gitignored; `evidence/dynamic-ports/` and `evidence/openrouter/` intentionally tracked.
-- **Still pending:** User walkthrough approval, remote push + GitHub Actions run (TEST-022), independent review, Manual TEST-025/026, 10-minute pitch rehearsal.
+- **Remote + CI:** pushed to `https://github.com/ArthurMinovsky/ai-sales-support-hub`; GitHub Actions run 38157082971 success (all 6 jobs) with retained image artifact — TEST-022 satisfied.
+- **Still pending:** User walkthrough approval, independent review, Manual TEST-025/026, 10-minute pitch rehearsal.
