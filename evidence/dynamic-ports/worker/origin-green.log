@@ -1,0 +1,18 @@
+
+Running 10 tests using 1 worker
+
+(node:98387) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/10] [chromium] › web/tests/e2e/auth.spec.ts:11:7 › Origin policy › accepts the actual host and dynamic port
+[2/10] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: http://attacker.example
+[3/10] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: http://localhost:45124
+[4/10] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: https://localhost:45123
+[5/10] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: null
+[6/10] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: missing
+[7/10] [chromium] › web/tests/e2e/auth.spec.ts:30:7 › Origin policy › does not trust a forged forwarded host
+[8/10] [chromium] › web/tests/e2e/auth.spec.ts:38:7 › Origin policy › rejects requests without a host
+[9/10] [chromium] › web/tests/e2e/auth.spec.ts:45:7 › Origin policy › requires a configured origin for HTTPS forwarded metadata
+[10/10] [chromium] › web/tests/e2e/auth.spec.ts:52:7 › Origin policy › keeps a configured HTTPS origin strict and cookies secure
+  10 passed (337ms)

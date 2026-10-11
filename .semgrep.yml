@@ -1,0 +1,21 @@
+rules:
+  - id: python-dangerous-eval
+    pattern: eval(...)
+    message: Do not evaluate dynamic code.
+    languages: [python]
+    severity: ERROR
+  - id: python-dangerous-exec
+    pattern: exec(...)
+    message: Do not execute dynamic code.
+    languages: [python]
+    severity: ERROR
+  - id: hardcoded-python-secret
+    patterns:
+      - pattern: $NAME = "..."
+      - pattern-not: $NAME = ""
+      - metavariable-regex:
+          metavariable: $NAME
+          regex: '(?i).*?(api_?key|password|jwt_?secret).*'
+    message: Potential hardcoded secret; review carefully.
+    languages: [python]
+    severity: WARNING

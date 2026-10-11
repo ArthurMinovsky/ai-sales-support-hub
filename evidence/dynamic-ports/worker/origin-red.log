@@ -1,0 +1,50 @@
+
+Running 9 tests using 1 worker
+
+(node:93254) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/9] [chromium] › web/tests/e2e/auth.spec.ts:11:7 › Origin policy › accepts the actual host and dynamic port
+  1) [chromium] › web/tests/e2e/auth.spec.ts:11:7 › Origin policy › accepts the actual host and dynamic port 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      14 |       headers: { host: "localhost:45123", origin: "http://localhost:45123" },
+      15 |     });
+    > 16 |     expect(isAllowedOrigin(request)).toBe(true);
+         |                                      ^
+      17 |     expect(secureCookieOptions(request).secure).toBe(false);
+      18 |   });
+      19 |
+        at /Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/web/tests/e2e/auth.spec.ts:16:38
+
+    Error Context: web/test-results/auth-Origin-policy-accepts-the-actual-host-and-dynamic-port-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    web/test-results/auth-Origin-policy-accepts-the-actual-host-and-dynamic-port-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace web/test-results/auth-Origin-policy-accepts-the-actual-host-and-dynamic-port-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+(node:93255) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[2/9] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: http://attacker.example
+[3/9] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: http://localhost:45124
+[4/9] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: https://localhost:45123
+[5/9] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: null
+[6/9] [chromium] › web/tests/e2e/auth.spec.ts:21:9 › Origin policy › rejects mismatched or absent origin: missing
+[7/9] [chromium] › web/tests/e2e/auth.spec.ts:30:7 › Origin policy › does not trust a forged forwarded host
+[8/9] [chromium] › web/tests/e2e/auth.spec.ts:38:7 › Origin policy › rejects requests without a host
+[9/9] [chromium] › web/tests/e2e/auth.spec.ts:45:7 › Origin policy › keeps a configured HTTPS origin strict and cookies secure
+  1 failed
+    [chromium] › web/tests/e2e/auth.spec.ts:11:7 › Origin policy › accepts the actual host and dynamic port 
+  8 passed (510ms)

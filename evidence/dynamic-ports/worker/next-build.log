@@ -1,0 +1,45 @@
+
+> ai-sales-support-hub-web@1.0.0 build
+> next build
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/aminovsky/pnpm-lock.yaml as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /Users/aminovsky/Desktop/Personal/Code_project/Engineering/Developer/ai-sales-support-hub-contracts-review-r1/ai-sales-support-hub-implementation-pretest-r1/ai-sales-support-hub/web/package-lock.json
+
+   ▲ Next.js 15.5.27
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 747ms
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/11) ...
+   Generating static pages (2/11) 
+   Generating static pages (5/11) 
+   Generating static pages (8/11) 
+ ✓ Generating static pages (11/11)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ƒ /                                      136 B         103 kB
+├ ○ /_not-found                            994 B         104 kB
+├ ƒ /api/auth/login                        136 B         103 kB
+├ ƒ /api/auth/logout                       136 B         103 kB
+├ ƒ /api/auth/register                     136 B         103 kB
+├ ƒ /api/backend/[...segments]             136 B         103 kB
+├ ○ /login                                 972 B         107 kB
+├ ƒ /products                            2.26 kB         105 kB
+├ ○ /register                            1.04 kB         107 kB
+└ ƒ /search                              2.15 kB         105 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/255-ce8c7c75002f810b.js       46.5 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js  54.2 kB
+  └ other shared chunks (total)          1.92 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

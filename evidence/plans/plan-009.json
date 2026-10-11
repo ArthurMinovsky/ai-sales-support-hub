@@ -1,0 +1,62 @@
+{
+  "plan_id": "PLAN-009",
+  "plan_revision": "R1",
+  "recorded_at_utc": "2026-10-11T14:01:52Z",
+  "source_revision": {
+    "branch": "main",
+    "commit": null,
+    "implementation_test_inputs_sha256": "30ec1aa74c28dd316c4c7605c101c3ee77db390f2b113ad2984d78d97071814a"
+  },
+  "actions": [
+    {
+      "id": "PLAN-009-A01",
+      "status": "COMPLETE",
+      "expected": "README documents prerequisites, local environment setup, one-command startup, endpoint use, and test/scan procedures.",
+      "observed": "README was updated to reflect actual local test/build/scan evidence and remaining blockers; it retains the one-command Docker Compose path and safe volume instructions.",
+      "evidence": ["README.md", "evidence/docker/smoke.json"]
+    },
+    {
+      "id": "PLAN-009-A02",
+      "status": "BLOCKED_ON_MANUAL_REHEARSAL",
+      "expected": "The five required pitch sections are rehearsed in ten minutes.",
+      "observed": "The pitch draft contains As Is/To Be, Architecture, Features, User Stories, UI Flow and limitations, but no timed rehearsal was performed.",
+      "evidence": ["docs/presentation/PITCH.md"],
+      "next_gate": "TEST-025 requires user review and a timed manual walkthrough."
+    },
+    {
+      "id": "PLAN-009-A03",
+      "status": "COMPLETE_WITH_BLOCKED_OUTCOMES",
+      "expected": "Every outcome has an evidence-linked VERIFIED, BLOCKED or UNVERIFIED state tied to a source revision.",
+      "observed": "Evidence matrix and Docker, browser, scanner and plan records identify pass evidence and explicit blockers. Contracts remain unchanged.",
+      "evidence": [
+        "docs/verification/EVIDENCE-MATRIX.md",
+        "evidence/backend/pytest-results-final.xml",
+        "evidence/frontend/playwright-execution.json",
+        "evidence/docker/smoke.json",
+        "evidence/docker/persistence.json",
+        "evidence/security/scan-review.json"
+      ]
+    },
+    {
+      "id": "PLAN-009-A04",
+      "status": "BLOCKED_ON_REQUIRED_USER_REVIEW",
+      "expected": "Present the walkthrough, obtain user approval, then local commit, independent review, manual verification and user decision.",
+      "observed": "WALKTHROUGH.html is prepared and presented for review. No User approval or commit was given; repository has no commit or remote. No independent review or manual acceptance has occurred.",
+      "evidence": ["WALKTHROUGH.html", "docs/verification/EVIDENCE-MATRIX.md"],
+      "next_gate": "User review and approval of WALKTHROUGH.html before local Git add/commit; then independent review and manual TEST-025/026. Do not push, publish or claim acceptance before those gates."
+    }
+  ],
+  "overall_status": "PARTIAL_BLOCKED_ON_USER_AND_EXTERNAL_INPUT",
+  "blockers": [
+    "TEST-018: secure OpenRouter credential not supplied.",
+    "TEST-022: no GitHub remote or committed revision.",
+    "TEST-025/026: required manual walkthrough and user acceptance are pending."
+  ],
+  "local_deployment": {
+    "status": "RUNNING",
+    "web": "http://localhost:3001",
+    "api": "http://localhost:8000",
+    "swagger": "http://localhost:8000/docs",
+    "volume_preserved": true
+  }
+}

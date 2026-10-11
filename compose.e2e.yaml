@@ -1,0 +1,14 @@
+services:
+  api:
+    environment:
+      OPENROUTER_API_KEY: fixture-only-not-a-real-key
+      OPENROUTER_MODEL: fixture-model
+      OPENROUTER_BASE_URL: http://mock-openrouter:9999/api/v1/chat/completions
+    depends_on:
+      mock-openrouter:
+        condition: service_started
+  mock-openrouter:
+    image: python:3.12-slim
+    volumes:
+      - ./tests/fixtures/openrouter_mock.py:/mock.py:ro
+    command: ["python", "/mock.py"]

@@ -1,0 +1,57 @@
+{
+  "plan_id": "PLAN-008",
+  "plan_revision": "R2",
+  "recorded_at_utc": "2026-10-11T13:59:12Z",
+  "source_revision": {
+    "branch": "main",
+    "commit": null,
+    "implementation_test_inputs_sha256": "30ec1aa74c28dd316c4c7605c101c3ee77db390f2b113ad2984d78d97071814a"
+  },
+  "actions": [
+    {
+      "id": "PLAN-008-A01",
+      "status": "PARTIAL",
+      "expected": "CI jobs define backend tests, frontend checks, Compose E2E, scans and a retrievable release artifact.",
+      "observed": "Workflow source defines these jobs and uploads an image tar artifact, but no GitHub Actions run exists.",
+      "evidence": [".github/workflows/ci.yml"],
+      "next_gate": "Configure an authorized Git remote, make the required reviewed commit, and run CI after the governance gates."
+    },
+    {
+      "id": "PLAN-008-A02",
+      "status": "COMPLETE",
+      "expected": "SCA, SAST, IaC and passive DAST each produce real reports and exit records.",
+      "observed": "pip-audit and npm audit reported zero advisories; Semgrep reported zero findings; Checkov completed with 118 Docker checks passed and one documented CKV_SECRET_6 skip; ZAP completed with 59 PASS, 0 FAIL and 8 warning categories.",
+      "evidence": [
+        "evidence/security/sca/",
+        "evidence/security/sast/semgrep.json",
+        "evidence/security/iac/results_json.json",
+        "evidence/security/dast/zap.json",
+        "evidence/security/scan-review.json"
+      ],
+      "next_gate": "Review the reported ZAP response-header warnings; do not interpret scan execution as zero risk."
+    },
+    {
+      "id": "PLAN-008-A03",
+      "status": "BLOCKED",
+      "expected": "A retrievable image artifact and digest from a real CI run.",
+      "observed": "Local Docker images built successfully; GitHub artifact has not been produced.",
+      "evidence": ["evidence/docker/smoke.json"],
+      "next_gate": "GitHub remote, reviewed local commit, and authorized CI run."
+    },
+    {
+      "id": "PLAN-008-A04",
+      "status": "COMPLETE_WITH_SCOPE_LIMITS",
+      "expected": "Run passive ZAP only after readiness, retain reports and exit status, then remove test-owned containers without deleting volumes.",
+      "observed": "Readiness was verified; ZAP scanned 21 unauthenticated URLs on the Compose network and retained JSON/HTML/Markdown reports and command status. E2E fixture containers were removed without -v; the plain local deployment was restored on the same named volume.",
+      "evidence": [
+        "evidence/security/dast/final-plain-command.txt",
+        "evidence/security/dast/exit-code.txt",
+        "evidence/security/dast/zap.json",
+        "evidence/security/dast/zap.html"
+      ],
+      "limits": ["Authenticated routes were not in the passive DAST scope.", "No remote CI run was available."]
+    }
+  ],
+  "overall_status": "PARTIAL_BLOCKED_ON_REMOTE_CI",
+  "next_gate": "TEST-022 requires a GitHub remote and reviewed commit; TEST-018 and manual acceptance remain separate blockers."
+}
