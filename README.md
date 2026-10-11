@@ -12,45 +12,17 @@ A small, demo-oriented product catalog and AI recommendation workspace for Sales
 - Next.js 15 TypeScript web, server-side BFF HttpOnly cookie, Origin checks on mutation requests, protected pages.
 - Pytest, Playwright, Docker Compose, GitHub Actions and four scanner configurations have local and CI verification evidence summarized below.
 
-## Reviewer launch (local Docker verified)
+## One-command Docker deployment
 
-**Prerequisites:** Docker Engine + Docker Compose v2, network access for pulling images/dependencies, and a strong local JWT key. AI inference requires separately configured OpenRouter API key; catalog CRUD does not.
+**Prerequisites:** Docker Engine with Docker Compose v2, OpenSSL, and network access for pulling images/dependencies. Run this single line in a terminal; it clones the repository, creates a private local `.env` with a random JWT signing key, builds both Docker images, starts both containers, and waits for them to become healthy:
 
-1. Copy `.env.example` to `.env` (do not commit). Set `JWT_SECRET` to 32+ random characters. Optionally set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL`.
-2. Choose either the standard Compose commands or the URL-reporting wrapper.
+```sh
+git clone https://github.com/ArthurMinovsky/ai-sales-support-hub.git && cd ai-sales-support-hub && (umask 077; printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" > .env) && docker compose up --build -d --wait --wait-timeout 180
+```
 
-   Build the current source and start both services with Docker Compose:
+Docker assigns free host ports when it creates the containers. For the same build/start with the actual Web, API, and Swagger URLs printed automatically, run `./start` from the cloned repository; that optional host-shell wrapper calls `docker compose up --build`, waits for healthy services, then reports the allocated ports. Direct Compose remains available at any time: `docker compose up --build -d`; to start an already-built stack use `docker compose up -d`. To inspect an existing stack's assigned ports, run `docker compose port web 3000` and `docker compose port api 8000`. An optional `COMPOSE_PROJECT_NAME` selects a different isolated stack.
 
-   ```sh
-   docker compose up --build -d
-   ```
-
-   The equivalent hyphenated command is available when your installation provides `docker-compose`:
-
-   ```sh
-   docker-compose up --build -d
-   ```
-
-   To start an already-built stack without forcing a rebuild, `docker-compose up -d` (or `docker compose up -d`) remains available.
-
-   Or run the **optional one-command URL-reporting wrapper**:
-
-   ```sh
-   ./start
-   ```
-
-   The command runs Docker Compose, waits until both services are healthy, then automatically prints the actual allocated Web, API and Swagger URLs. No separate status command is required.
-
-   ```text
-   AI Sales Support Hub is ready
-   Web:     http://localhost:<allocated-web-port>
-   API:     http://localhost:<allocated-api-port>
-   Swagger: http://localhost:<allocated-api-port>/docs
-   ```
-
-   Ports are assigned by Docker after the containers are created; they are not fixed in the launcher. The wrapper runs `docker compose up --build --detach --wait --wait-timeout 180`, then reads the published ports and prints the URLs. Direct Compose commands remain fully supported; get their assigned host ports with `docker compose port web 3000` and `docker compose port api 8000`. To inspect an already running stack later, `./scripts/status.sh` remains available. An optional `COMPOSE_PROJECT_NAME` selects a different isolated stack.
-
-   `./start` is a host shell script, not a Docker image or build artifact. It uses the host's POSIX shell and standard tools and requires no additional package installation.
+OpenRouter is optional for starting the Web app and catalog CRUD. To enable live AI inference, add `OPENROUTER_API_KEY` to the ignored local `.env` before starting the stack.
 TEST-010 verified user and product persistence across `docker compose down` (without `-v`) and re-up. The evidence records the named volume and persisted product. **Never run `docker compose down -v` on data you wish to retain.**
 
 Host port allocation avoids collisions with existing containers on each machine. Internal container ports stay `3000` and `8000`; allocated host ports can change when containers are recreated. Leave `WEB_PORT=0`, `API_PORT=0` and `APP_ORIGIN=` for direct Docker access. Set `WEB_PORT` or `API_PORT` to a chosen host port when a stable mapping is needed. If an override is occupied, Docker reports an error; use `0` to restore automatic allocation.
