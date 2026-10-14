@@ -37,4 +37,4 @@ GitHub Actions run 38505764658 passed all six jobs: backend, frontend, integrati
 
 The original clean checkout was synchronized after CI success. Its ignored credentials and local historical reports were preserved byte-for-byte; original named volumes remain detached rather than deleted. The documented local launcher built, force-recreated, waited for health and printed dynamically allocated URLs successfully. Rediscover current URLs using scripts/status.sh.
 
-This final handoff update changes reporting only. Execution-relevant file hashes remain identical to the verified implementation. Inspect the exact latest commit's CI separately; earlier results are never silently relabeled as a new execution.
+Final updates change reporting and clarify the verification recipe's isolated project name so it matches the reset helper's safety guard. Application, test and configuration code remains identical to the verified implementation. Inspect the exact latest commit's CI separately; earlier results are never silently relabeled as a new execution.

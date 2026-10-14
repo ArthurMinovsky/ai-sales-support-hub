@@ -7,11 +7,11 @@
 - Pin the approved repository revision/working tree; preserve source file digests.
 - Copy `.env.example` to `.env`, set a 32+ character JWT_SECRET, no real credentials committed.
 - Run in isolated Docker Compose project and preserve all `evidence/*` outputs after cleanup.
-- Use `docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-e2e up --build -d` for the isolated fixture. Leave `WEB_PORT=0`, `API_PORT=0`, `APP_ORIGIN=` to let Docker allocate unused host ports and enforce the actual browser origin.
+- Use `docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-reset-e2e up --build --force-recreate -d --wait --wait-timeout 180` for the isolated fixture. Leave `WEB_PORT=0`, `API_PORT=0`, `APP_ORIGIN=` to let Docker allocate unused host ports and enforce the actual browser origin.
 - Discover the published endpoints and verify readiness before browser tests:
 
   ```sh
-  export COMPOSE_PROJECT_NAME=saleshub-e2e
+  export COMPOSE_PROJECT_NAME=saleshub-reset-e2e
   web_port="$(docker compose port --index 1 web 3000 | sed -n '1s/.*://p')"
   api_port="$(docker compose port --index 1 api 8000 | sed -n '1s/.*://p')"
   export PLAYWRIGHT_BASE_URL="http://localhost:$web_port"
@@ -26,7 +26,7 @@
 
 1. Backend: create `evidence/backend/`, install test dependencies, and run `pytest -q --junitxml=../evidence/backend/pytest-results.xml` from `backend/` (TEST-001..005,008..009,011..013,024).
 2. Frontend: `cd web && npm ci --no-audit --no-fund && npx playwright install --with-deps chromium && npm run test:e2e` against e2e stack (TEST-006/007/014..017).
-3. Reset TEST-010: after E2E completes, run `python3 tests/verification/check_reset.py --project saleshub-reset-<run-id> --output evidence/docker/reset.json` on an isolated fixture stack. It restarts and force-recreates the API, verifies restored samples, account reuse and rejection of earlier tokens. Do not run it against a shared stack.
+3. Reset TEST-010: after E2E completes, run `python3 tests/verification/check_reset.py --project saleshub-reset-e2e --output evidence/docker/reset.json` against the same isolated fixture stack. The project name matches the helper's safety guard. It restarts and force-recreates the API, verifies restored samples, account reuse and rejection of earlier tokens. Do not run it against a shared stack.
 4. TEST-020/021: plain `docker compose up --build`, discover Web/API host ports with `docker compose port web 3000` and `docker compose port api 8000`, then verify Web `/login`, API `/health` and Swagger paths; save `evidence/docker/smoke.json` with source identity, discovered URLs and timestamps. Internal ports remain 3000/8000.
 5. TEST-018: with real OpenRouter key in runtime only, submit actual query, redact logs, record model/status/provider metadata and resulting DB-known IDs to `evidence/openrouter/live-inference-redacted.json`. If missing key, report BLOCKED.
 6. TEST-019: start live ready stack, run scripts/security/run-scans.sh with required tool dependencies; capture four tools' exit/status/severity and reports, do not claim unauthenticated ZAP baseline covers authenticated endpoints. Stop stack created by run only; preserve reports.

@@ -2,6 +2,7 @@
   "date": "2026-10-14",
   "scope": "Fresh local repair verification; original reports are historical. No new live provider call.",
   "source_identity": "Per-file SHA-256 binds tested application/configuration to rewritten history without claiming old commit IDs were freshly tested.",
+  "documentation_note": "The isolated-project recipe was clarified after local verification. Application, test and configuration code is unchanged; inspect latest-commit CI for fresh publication verification.",
   "file_hashes": {
     ".github/workflows/ci.yml": "891a4cc117c2619b619c769ac978f5a8b15cf6b84aba6323271b1ce9c4313a4e",
     ".semgrep.yml": "4c042d99fed924d5f04b79421ef33902e6b676b01057d335f8e1c98886ca69d5",
@@ -42,7 +43,7 @@
     "scripts/status.sh": "0f3a2f91191feb04f72a6470bb837e68ba919b5083937f3148bd637326901b7c",
     "start": "730978d30d7e37701171e8eab1003c54dcfb9dfc0ec25dd10832b5435c2884ae",
     "tests/fixtures/openrouter_mock.py": "909751d42509b8a975fa305444c07429afe9e0f8d3beb63284061a34c7c7f0b4",
-    "tests/verification/README.md": "892459f3fb2b348028675ee599b128d46cd2327efe83ffc69ccf35871179e746",
+    "tests/verification/README.md": "14a054b31367d6efc269e40f61ac5bb884e7211e18baff1d3216debe58a317de",
     "tests/verification/check_reset.py": "f5c891b91ffd5ebfe10a51ad6d4c8626f83cb1c6c1a17d7aae378b4fa24010be",
     "tests/verification/test_security_triage.py": "bcba1604336989b9d611128962a1d7d8ce452515db44c75bd90b09dad6b4fd53",
     "web/package-lock.json": "cc92217ecc212e4dca48eb6478eb7d2150e08694666a6fce8cfdc0f71c04ee0a",
