@@ -6,7 +6,7 @@
 
 **Source of requirements:** Privately archived product brief and the User-approved repair plan of 14 October 2026
 **Proposal date:** 2026-10-10 (Asia/Bangkok)  
-**Current lifecycle state:** `REPAIR_VERIFICATION_ACTIVE`
+**Current lifecycle state:** `SCOPED_REPAIR_VERIFIED` (PLAN-010; no new live-provider or manual acceptance claim)
 
 ## 1. Intent / Mission
 

@@ -17,7 +17,7 @@ Current executable plan: plans/PLAN-010.md. It supersedes the email and persiste
 
 ## Verification and release state
 
-Implementation and verification are active. Actual current results belong in ../verification/REPAIR-REPORT.md and its referenced evidence.
+The scoped repair is verified and published. Actual results belong in ../verification/REPAIR-REPORT.md and its referenced evidence. This state applies to the approved repair scope, not new live inference or a fresh manual acceptance decision.
 
 Backend RED/GREEN logs are retained privately. Current local verification passes 18 backend tests, 18 browser checks, 10 scanner-evaluator cases, typecheck/build, real-container readiness, tmpfs ownership/bounds and separate restart/recreation reset checks. Four scans pass under their documented scope; DAST retains one reviewed medium warning and four informational alert types. Exact source/report hashes are in repair-evidence.json. Rewritten-history CI is a separate publication check.
 
@@ -29,6 +29,12 @@ Before rewriting, main and origin/main were e9d3ec05c8365d2476163b595f31914de81d
 
 Use a fresh isolated clone for git-filter-repo. Retain the original recovery bundle and commit mapping privately. Remove earlier excluded report paths and target branding/contact text throughout reachable history. Do not publish private originals, real .env values or claim edited historical evidence as a fresh execution.
 
-## Next action
+## Publication verification
 
-Complete isolated browser/reset/scanner verification, prepare the sanitized history, validate a fresh clone, publish with an explicit expected-old-tip lease, and verify the new CI run. Synchronize the original clean checkout while preserving ignored files.
+Implementation commit 9aa6ffcadfed38d58c7bd6a1f8da15d9fdb12062 was published with the recorded expected-old-tip lease. A fresh GitHub clone passed the reachable-history audit (17 commits, 182 blobs, no targeted findings), all 66 execution-relevant source hash checks, 18 backend tests, clean npm installation, typecheck and build.
+
+GitHub Actions run 38505764658 passed all six jobs: backend, frontend, integration (including API restart/recreation and stale-token rejection), static security, passive DAST and release images. Test/scan artifacts and the Docker image archive were downloaded privately. See https://github.com/ArthurMinovsky/ai-sales-support-hub/actions/runs/38505764658 for the exact implementation revision.
+
+The original clean checkout was synchronized after CI success. Its ignored credentials and local historical reports were preserved byte-for-byte; original named volumes remain detached rather than deleted. The documented local launcher built, force-recreated, waited for health and printed dynamically allocated URLs successfully. Rediscover current URLs using scripts/status.sh.
+
+This final handoff update changes reporting only. Execution-relevant file hashes remain identical to the verified implementation. Inspect the exact latest commit's CI separately; earlier results are never silently relabeled as a new execution.

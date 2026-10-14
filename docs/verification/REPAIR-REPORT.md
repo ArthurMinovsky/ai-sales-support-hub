@@ -41,6 +41,10 @@ The scan is unauthenticated and passive. Its result does not establish complete 
 
 ## Repository cleanup and release procedure
 
+The implementation was published as 9aa6ffcadfed38d58c7bd6a1f8da15d9fdb12062 using the recorded lease. A fresh remote clone passed the history audit (17 commits, 182 blobs, zero targeted findings), matched all 66 execution-relevant hashes, and passed 18 backend tests, clean npm installation, typecheck and build. [CI run 38505764658](https://github.com/ArthurMinovsky/ai-sales-support-hub/actions/runs/38505764658) passed all six jobs, including restart/recreation and release image creation. Test/scan artifacts and the image archive were retained privately.
+
+The original checkout was synchronized only after CI success, preserving ignored credentials and local historical files byte-for-byte. The documented local ./start command then exited 0, waited for healthy services and printed the allocated URLs. Original named volumes remain detached and intact. This reporting update leaves all execution-relevant source hashes unchanged; its latest-commit CI is a separate run.
+
 Remove targeted contact/branding/framing text from current first-party files and all reachable historical blobs/messages/paths. Exclude earlier private report paths and their validation records throughout history. Keep replacement rules, the original bundle and commit maps privately. Publication uses an explicit expected-old-tip force-with-lease; concurrent remote changes must be reconciled.
 
 Verify the published commit through a fresh clone and its own CI run before closing the repair. Historical results and manual acceptance are not automatically transferred to the changed implementation. Removing reachable history cannot guarantee removal from hosting caches, pull-request references or other people's clones.

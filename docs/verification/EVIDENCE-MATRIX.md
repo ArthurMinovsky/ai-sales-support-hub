@@ -7,7 +7,7 @@ Updated 14 October 2026. Current authority: PLAN-010 and the User-approved repai
 | OUT-001/002 | Mock recommendation tests and actual Swagger readiness pass | Earlier live-provider evidence is historical; no fresh live call |
 | OUT-003 | 18 backend and 18 browser checks pass; normalized username/confirmation, CRUD reload and one-hour sessions | Shared demo catalog, no tenant isolation |
 | OUT-004 | Pytest, Playwright, typecheck and production build executed successfully | Exact tested source hashes in repair-evidence.json |
-| OUT-005 | Compose builds/startup and four local scans pass under recorded scope | Verify the exact newly published commit through its own CI artifacts |
+| OUT-005 | Compose builds/startup and four local scans pass; implementation CI run 38505764658 passes all six jobs and creates image artifacts | Run is tied to implementation commit 9aa6ffc; later reporting commits have separate CI |
 | OUT-006 | Generic README, API documentation, Architecture pair and verification recipes | Original private reports are excluded from publication |
 | OUT-007 | Missing/wrong/expired/previous-start tokens rejected; secret-safe validation | Passive DAST retains one reviewed medium warning and four informational types |
 | OUT-008 | Per-file hashes, report hashes, exits and observations retained | Historical manual decisions do not establish acceptance of changed behavior |
