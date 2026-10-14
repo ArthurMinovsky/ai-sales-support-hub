@@ -2,8 +2,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.db.models import Product
 
-# Synthetic internal catalog for the project workspace. Product families and
-# names are fictional Sales Support Hub-style examples, not real offerings.
+# Synthetic sample catalog for the demo workspace. Product families and
+# names are fictional synthetic examples, not real offerings.
 SAMPLES = [
     {
         "name": "VisionScan IQ-200 Edge Vision Gateway",

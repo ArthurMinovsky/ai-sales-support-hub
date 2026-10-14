@@ -1,24 +1,24 @@
 # PRD — AI Sales Support Hub
 
-> **PROPOSAL R1 — NOT APPROVED.** Derive from approved OUTCOME R1 `801acfc6…334bbb1`. Constitution R1 is a *proposal*, not governing law yet; PRD R1 is conditional on its approval without material amendments.
+> R2 — Behavior amendment authorized by the User's approved repair plan, 14 October 2026. Original governing bytes and approval history are privately archived. This revision removes email registration, adopts disposable Docker state and retains existing auth/AI security boundaries.
 
 ## 1. Business problem and scope
 
 A BU Product/Sales Specialist must identify matching items from an editable catalog for a prospect. Today the concept relies on manual interpretation/search; target is secure web-enabled catalog administration and AI-backed suggestion within a reproducible demonstration demonstration. Primary actor: registered BU staff user. Secondary actor: technical reviewer testing Docker, Swagger, auth, scans and CI.
 
-**Required MVP:** register/login, 60-minute token, authenticated search and product CRUD, FastAPI Swagger, real OpenRouter call, Next.js TypeScript REST web, persisted local catalog, unit/E2E, Docker one-command, Git+CI/CD build, SCA/SAST/DAST/IaC, README and 10-minute pitching content. **Deferred:** full analytics, document ingestion/RAG, cross-selling engine, history/template, ERP/CRM, production cloud deployment.
+**Required MVP:** register/login, 60-minute token, authenticated search and product CRUD, FastAPI Swagger, real OpenRouter call, Next.js TypeScript REST web, session-scoped local catalog, unit/E2E, Docker one-command, Git+CI/CD build, SCA/SAST/DAST/IaC, README and 10-minute pitching content. **Deferred:** full analytics, document ingestion/RAG, cross-selling engine, history/template, ERP/CRM, production cloud deployment.
 
 ## 2. Stable user stories and acceptance scenarios
 
 | Story | Scenario | Given / When / Then | Outcome |
 |---|---|---|---|
-| US-001 Registration | US-001.SC-001 | Given a new username/email and strong password, when registering, then the user is persisted with a one-way password hash and can log in. | OUT-003 |
-| US-001 Registration | US-001.SC-002 | Given an already registered username/email or invalid fields, when registering, then a safe validation/conflict response occurs; no duplicate inserted. | OUT-003/007 |
+| US-001 Registration | US-001.SC-001 | Given a new username and matching strong password/confirmation, when registering, then the user is persisted with a one-way password hash and can log in. | OUT-003 |
+| US-001 Registration | US-001.SC-002 | Given an already registered username or invalid fields, when registering, then a safe validation/conflict response occurs; no duplicate inserted. | OUT-003/007 |
 | US-002 Sign-in | US-002.SC-001 | Given valid username/password, when logging in, then session authenticates and expires at 3600 seconds. | OUT-003 |
 | US-002 Sign-in | US-002.SC-002 | Given no/bad token, when calling protected REST endpoints or viewing protected pages, then access is denied or redirected without leaking data. | OUT-003/007 |
 | US-002 Sign-in | US-002.SC-003 | Given expired token, when performing privileged requests, then server rejects it and the user must log in again. | OUT-003/007 |
 | US-003 Manage products | US-003.SC-001 | Given authorized user, when adding/editing/listing/deleting a product, then changes reflect in the UI and REST responses. | OUT-003 |
-| US-003 Manage products | US-003.SC-002 | Given persisted catalog, when containers restart using retained volume, then saved products/users remain. | OUT-003/005 |
+| US-003 Manage products | US-003.SC-002 | Given an account and edited catalog, when the API container restarts or is recreated, then accounts/edits disappear, ten demo products reload and old tokens fail even if IDs are reused. | OUT-003/005 |
 | US-003 Manage products | US-003.SC-003 | Given invalid mandatory product fields, when submitting, then validation prevents malformed persistence. | OUT-007 |
 | US-004 Find products | US-004.SC-001 | Given valid key and products, when searching in natural language, then OpenRouter is actually called and response recommends only catalog IDs with meaningful reasons. | OUT-001/002 |
 | US-004 Find products | US-004.SC-002 | Given a provider response citing unknown IDs or malformed output, when post-processing, then unknown records are not presented as catalog products. | OUT-001/007 |
@@ -33,14 +33,14 @@ A BU Product/Sales Specialist must identify matching items from an editable cata
 
 | ID | Requirement | Classification | Story | Outcome |
 |---|---|---|---|---|
-| PRD-001 | Register (username/email/password), reject duplicates, hash password; authenticate username/password and enforce JWT lifetime exactly 3600 seconds. | CORE-001 | US-001, US-002 | OUT-003,007 |
+| PRD-001 | Register (username/password/confirm_password), require matching passwords, reject duplicate usernames, hash password; authenticate username/password and enforce JWT lifetime exactly 3600 seconds. | CORE-001 | US-001, US-002 | OUT-003,007 |
 | PRD-002 | Require signed valid bearer JWT for FastAPI product CRUD and suggestions, no authorization solely in browser; frontend protected pages redirect when session absent. | CORE-001 | US-002 | OUT-003,007 |
 | PRD-003 | Persist product catalog with name, brand, description (10+ chars), category, type, subtype, image URL; create/list/get/update/delete and input validation. | CORE-002 | US-003 | OUT-003,007 |
 | PRD-004 | Provide customer-needs text input and return at most three suggestions anchored to known product IDs, with reason and product detail in typed REST response. | CORE-003 | US-004 | OUT-001 |
 | PRD-005 | Invoke OpenRouter for inference when properly configured; validate LLM output and refuse to masquerade mocked/fallback behavior as a genuine AI success. | CORE-003 | US-004 | OUT-001,002,007 |
 | PRD-006 | Python FastAPI with Swagger/OpenAPI, typed request/response and actionable error contracts. | CORE-002/003 | US-005 | OUT-002 |
 | PRD-007 | Next.js TypeScript web with Register/Login, product management and suggestion flows communicating via JSON REST. | CORE-001/002/003 | US-001–004 | OUT-003 |
-| PRD-008 | Docker Compose starts Next.js + FastAPI in one command after documented local configuration; database state survives Compose restart. | CORE-004 | US-005 | OUT-005 |
+| PRD-008 | Docker Compose starts Next.js + FastAPI in one command after documented local configuration; database state resets on each API container start/restart. | CORE-004 | US-005 | OUT-005 |
 | PRD-009 | GitHub Actions automates checks and build/release image artifact; runs SCA/SAST/DAST/IaC and publishes logs/reports. | CORE-006 | US-005 | OUT-005,008 |
 | PRD-010 | Backend pytest unit tests and frontend Playwright E2E for happy/error security paths with result evidence. | CORE-005 | US-001–005 | OUT-004,008 |
 | PRD-011 | README, `.env.example`, Git URL, reproducible verification checklist and 10-minute pitch covering five mandated topics. | CORE-007 | US-005–006 | OUT-006,008 |
@@ -52,9 +52,9 @@ A BU Product/Sales Specialist must identify matching items from an editable cata
 ## 4. Nonfunctional requirements
 
 - **PRD-NFR-001 Security:** Secure hash Argon2id; JWT signed with confidential server secret; TTL 3600s; deny missing/invalid/expired tokens; HttpOnly SameSite Lax cookie for BFF login, and Origin check for mutating BFF requests; never expose token or OpenRouter key in browser JS. Secret present only server-side. Applies to OUT-003/007.
-- **PRD-NFR-002 Integrity:** Products and users persist across restarts with documented named volume. Product recommendation IDs must match catalog rows. OUT-001/003/005.
+- **PRD-NFR-002 Integrity:** Products and users last only for the current API container run. A bounded tmpfs resets all accounts/edits on restart and reloads ten demo products. Product recommendation IDs must match catalog rows. OUT-001/003/005.
 - **PRD-NFR-003 Operability:** `/health` API endpoint, human-readable failure messages, configurable timeouts to OpenRouter. Missing OpenRouter key must not make catalog/admin unusable. OUT-005/007.
-- **PRD-NFR-004 Scale:** demo/demo: one BU team, up to roughly 100–1,000 seeded/catalog items, low concurrency, one backend process. These are *design assumptions*, not employer-provided workload targets. No production HA/SLA promise. OUT-005/008.
+- **PRD-NFR-004 Scale:** demo/demo: one BU team, up to roughly 100–1,000 seeded/catalog items, low concurrency, one backend process. These are *design assumptions*, not original specification-provided workload targets. No production HA/SLA promise. OUT-005/008.
 - **PRD-NFR-005 Verification:** Every mandatory outcome must have an executable or manual verification seam, evidence path, revision binding, and `PASS/FAIL/BLOCKED/UNVERIFIED` classification. OUT-004/008.
 - **PRD-NFR-006 External data:** Provider payload contains minimum product fields needed to rank, never username/password, access token or internal secrets. OUT-007.
 
@@ -62,7 +62,7 @@ A BU Product/Sales Specialist must identify matching items from an editable cata
 
 | Verb/path (FastAPI) | Request | Success | Failure |
 |---|---|---|---|
-| `POST /api/auth/register` | `{username,email,password}` | `201 UserPublic` | 422/409 |
+| `POST /api/auth/register` | `{username,password,confirm_password}` | `201 UserPublic` | 422/409 |
 | `POST /api/auth/login` | `{username,password}` | `200 {access_token,token_type,expires_in:3600}` | 401/422 |
 | `GET /api/auth/me` | Bearer token | `200 UserPublic` | 401 |
 | `GET /api/products` | token, optional search | `200 Product[]` | 401 |
@@ -77,8 +77,8 @@ A BU Product/Sales Specialist must identify matching items from an editable cata
 
 ## 6. Security/acceptance decisions (proposed inline ADRs)
 
-- **ADR-001 — Database:** SQLite via SQLAlchemy and Docker named volume for a single-host demo. Why: deterministic single-command deployment; cost: concurrent-write limit and no horizontal HA; revisit at real multi-user production scale.
-- **ADR-002 — Session boundary:** FastAPI signed JWT 3600s; Next.js BFF route handlers store token in HttpOnly SameSite=Lax cookie and add Authorization to internal API requests; server validates token on every protected API call. Why: avoid JS token exposure and browser cross-origin problem; cost: BFF code and CSRF/origin checks. Public FastAPI docs available separately for reviewer.
+- **ADR-001 — Database:** SQLite via SQLAlchemy and a bounded Docker tmpfs for a single-host demo. Why: deterministic single-command deployment; cost: concurrent-write limit and no horizontal HA; revisit at real multi-user production scale.
+- **ADR-002 — Session boundary:** FastAPI signed JWT 3600s with a random per-start epoch that rejects tokens from previous API starts; Next.js BFF route handlers store token in HttpOnly SameSite=Lax cookie and add Authorization to internal API requests; server validates token on every protected API call. Why: avoid JS token exposure and browser cross-origin problem; cost: BFF code and CSRF/origin checks. Public FastAPI docs available separately for reviewer.
 - **ADR-003 — Recommendation:** Deterministic candidate shortlist, up to 20 known items; OpenRouter models rank/reason over shortlist; strict JSON/Pydantic validation and ID allowlist. Reason: reduce hallucination/cost; limitation: lexical shortlist may miss semantic matches; no vector DB for initial demo.
 - **ADR-004 — OpenRouter failure:** API missing key/timeout/invalid schema returns typed 503 and web displays provider unavailable; no silent model replacement. Why: genuine evidence and honest UX.
 - **ADR-005 — DevSecOps:** GitHub Actions + pytest + Playwright + npm audit/pip-audit (SCA) + Semgrep (SAST) + ZAP baseline (DAST) + Checkov (IaC); artifacts/logs retained. Authenticated DAST coverage may be limited; label it honestly and add manual authorized API tests.
@@ -97,8 +97,8 @@ A BU Product/Sales Specialist must identify matching items from an editable cata
 
 ## 8. Scope and evidence assumptions
 
-- Employer PDF pages 1–3 establish required technologies/tests/scans and image concepts, but **do not** require a full analytics dashboard, cross-selling engine, detailed product schema, cloud deployment or RAG.
-- The due time of Sunday 11 October 2026 evening remains a User estimate and is not claimed employer-confirmed.
+- original specification PDF pages 1–3 establish required technologies/tests/scans and image concepts, but **do not** require a full analytics dashboard, cross-selling engine, detailed product schema, cloud deployment or RAG.
+- The due time of Sunday 11 October 2026 evening remains a User estimate and is not claimed original specification-confirmed.
 - The current workspace contains the attached PDF and approved Outcome HTML; no user Git repository URL, live OpenRouter key, ClickUp task or external execution harness was supplied. Code/CI execution remains unverified.
 - UI can use simple accessible components rather than extensive design system dependencies; seed catalog contains explicitly fictional demo products.
 

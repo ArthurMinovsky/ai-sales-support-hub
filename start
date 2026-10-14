@@ -5,7 +5,7 @@ set -eu
 CDPATH= cd "$(dirname "$0")"
 project="${COMPOSE_PROJECT_NAME:-saleshub-implementation-check}"
 
-docker compose -p "$project" up --build --detach --wait --wait-timeout 180
+docker compose -p "$project" up --build --force-recreate --detach --wait --wait-timeout 180
 
 published_port() {
     binding="$(docker compose -p "$project" port --index 1 "$1" "$2")"

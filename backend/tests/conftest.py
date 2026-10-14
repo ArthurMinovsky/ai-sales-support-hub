@@ -21,7 +21,7 @@ def client(tmp_path, monkeypatch):
 
 @pytest.fixture
 def token(client):
-    response = client.post("/api/auth/register", json={"username": "sampleuser", "email": "sample@example.test", "password": "test-password-123"})
+    response = client.post("/api/auth/register", json={"username": "sampleuser", "password": "test-password-123", "confirm_password": "test-password-123"})
     assert response.status_code == 201
     login = client.post("/api/auth/login", json={"username": "sampleuser", "password": "test-password-123"})
     assert login.status_code == 200

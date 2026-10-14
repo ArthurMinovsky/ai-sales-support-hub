@@ -4,7 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 COPY pyproject.toml ./
 COPY app/ ./app/
 RUN pip install --no-cache-dir .
-RUN useradd -r -u 10001 app && mkdir -p /data && chown app:app /data
+RUN groupadd -r -g 10001 app && useradd -r -u 10001 -g app app && mkdir -p /data && chown app:app /data
 USER app
 HEALTHCHECK --interval=10s --timeout=5s --retries=12 CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"
 EXPOSE 8000

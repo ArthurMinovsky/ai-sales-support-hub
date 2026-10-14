@@ -1,0 +1,331 @@
+{
+  "date": "2026-10-14",
+  "scope": "Fresh local repair verification; original reports are historical. No new live provider call.",
+  "source_identity": "Per-file SHA-256 binds tested application/configuration to rewritten history without claiming old commit IDs were freshly tested.",
+  "file_hashes": {
+    ".github/workflows/ci.yml": "891a4cc117c2619b619c769ac978f5a8b15cf6b84aba6323271b1ce9c4313a4e",
+    ".semgrep.yml": "4c042d99fed924d5f04b79421ef33902e6b676b01057d335f8e1c98886ca69d5",
+    "backend/Dockerfile": "412c633e410988d0a5eb9f3c758711ed8f26cb51f6f2042dd4c7fd270b0e7022",
+    "backend/app/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/api/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/api/deps.py": "480a369f14e88687f3b4b83efff8fd5626f2827accccd9d9f970176dc909a82c",
+    "backend/app/api/routes/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/api/routes/auth.py": "cafd2329d069927085bf4f2b90f851dfb69d00dfaa8d8c22b8f5fe971e4d1096",
+    "backend/app/api/routes/products.py": "7eed45ba0964f534c0ff558161d88b56051aeb62761d82e82d9fd333b630ec27",
+    "backend/app/api/routes/suggestions.py": "68c0927b4363b33845e030cc91875f160609735396f0bfac9cfa457e1b541025",
+    "backend/app/core/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/core/config.py": "88f814f09f27e762b45274a930f0df6f1884a2c126ef25b790fcd2f85ae3ca9c",
+    "backend/app/core/security.py": "6578e41751e254610583f98f2dec74ecb0f1ae1d4d5b430f3927451d47e4f424",
+    "backend/app/db/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/db/models.py": "a2941f678aee885be3fb17cd259cffdd7682ec29c00e0bf119d6afe91ac54bfc",
+    "backend/app/db/session.py": "6db7add7f4db7b80bc2747fe236f424769945a2a38c50dd3c50c8463cae85063",
+    "backend/app/main.py": "aa71919c75beba6d83a0621860a3e0c7c4df86913bb677ba337062695ec99a37",
+    "backend/app/schemas/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/schemas/auth.py": "15ecefd6931a67eb746f72a944c64522ed8bd4d74922c2a59343fe56178e35c6",
+    "backend/app/schemas/product.py": "8cd256997d4ce1fc6eb413e8221834a074a3bfbb4606c30a2ecc0aff9f5ff4c5",
+    "backend/app/schemas/suggestion.py": "512ee54c3b25e3d5500477464720c0f1dc6224ffde16f34ea2656021e7e2620b",
+    "backend/app/seed.py": "2f5d50ee45fac47da030007ec0f06985c3f95743e85943c98bb7583f38f10a51",
+    "backend/app/services/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "backend/app/services/openrouter.py": "cc170b37608462cf1d0d68679d20a3172e6a432ff8ede589f88eccf397cbecc0",
+    "backend/app/services/recommendation.py": "d9ed8d1bd44d38f7b835a269ae8f9fd2362778f710597e9a9e987696748a60b3",
+    "backend/pyproject.toml": "2a7639fe929a7983d37e5cd1a895fa74fb92ddab92dc149b5952ca208fdaba77",
+    "backend/tests/conftest.py": "996bdf6a6079a4c20fb7b8aa016dff8a41a2fff7533474c9281d44ab1fffff11",
+    "backend/tests/test_auth.py": "93e94f060f563d6b8a7be9961cecfdf4baf5f5f763273d61bfcc9c1395179be3",
+    "backend/tests/test_openrouter_adapter.py": "b7c94ca37bc623f193ad09737406f8ced14cc68c2b9437e1c14bf3bfd0a1eaa3",
+    "backend/tests/test_products.py": "8e93c90e1cba5b1db76459db9fc9b613b534939262c546775636ef9444b2cb97",
+    "backend/tests/test_suggestions.py": "caf693f757c85c855833d9947c4c55621546f4cb15e1a1e7ad4459ac14fa86ca",
+    "compose.e2e.yaml": "0cd589f59e735c9832e754ccae1408de7a3765d7da41b0a1de7458fc521eeafc",
+    "compose.yaml": "48bb54a9f7bcac3d1de71f56bb4204550f8abf2da806f03d8290a7de1310771e",
+    "scripts/security/run-scans.sh": "292dbe9cb52fd70b58025c2a4490b5e3c805fa955458f62c27430d7d4c16fd37",
+    "scripts/security/run-zap.sh": "e6ea1e554ccb6f9d91d321684a94d9d46cd6508b8265d6969dbc8c66d2f3c18a",
+    "scripts/security/triage.py": "a6cca023e093f313e190fa31c53ec01ca3509020f323f93602203503ee0793f6",
+    "scripts/status.sh": "0f3a2f91191feb04f72a6470bb837e68ba919b5083937f3148bd637326901b7c",
+    "start": "730978d30d7e37701171e8eab1003c54dcfb9dfc0ec25dd10832b5435c2884ae",
+    "tests/fixtures/openrouter_mock.py": "909751d42509b8a975fa305444c07429afe9e0f8d3beb63284061a34c7c7f0b4",
+    "tests/verification/README.md": "892459f3fb2b348028675ee599b128d46cd2327efe83ffc69ccf35871179e746",
+    "tests/verification/check_reset.py": "f5c891b91ffd5ebfe10a51ad6d4c8626f83cb1c6c1a17d7aae378b4fa24010be",
+    "tests/verification/test_security_triage.py": "bcba1604336989b9d611128962a1d7d8ce452515db44c75bd90b09dad6b4fd53",
+    "web/package-lock.json": "cc92217ecc212e4dca48eb6478eb7d2150e08694666a6fce8cfdc0f71c04ee0a",
+    "web/package.json": "2ce739dadc93f85b368d30ae2ec1acac6bac8fcad9bb8521c26370f55e84af45",
+    "web/src/app/(app)/layout.tsx": "3cef654043f0d3be1a87ad1c88dc1eef9c30abbd69f5532042f8029eb694b90a",
+    "web/src/app/(app)/products/page.tsx": "64602bed8e5aa6f810d46c0cba71a21a8eec407251ca93894da03f88211c1521",
+    "web/src/app/(app)/search/page.tsx": "ef54d8db94a721bafe781fc1d8077d095ee60c332c486239359013bb1caae47e",
+    "web/src/app/api/auth/login/route.ts": "e50076c870fcac794641c4b9efe928f0df335a98fc7d5c52f7c02aa1cd3db523",
+    "web/src/app/api/auth/logout/route.ts": "8004082043f3e3e44eed86f6c28a663a1fdfbe89b7642e4d0f20bc44682dc2b9",
+    "web/src/app/api/auth/register/route.ts": "78c776a3b3cdfe87a1fe86653560bafb971b08e848c8d5dddb115c44c2b6599e",
+    "web/src/app/api/backend/[...segments]/route.ts": "17252440f2a0af545f9b58e40b104a4b9ed01de4c84243a6c075cde453e61385",
+    "web/src/app/globals.css": "d89ec29a045742df18f994b88188dcddf735dabe99eec2a422f77e0ac56bb653",
+    "web/src/app/layout.tsx": "fb74b86acae434209e0727a17581603e592aea72a6c8bbc18633daec48499550",
+    "web/src/app/login/page.tsx": "49e8876eb0f19e55ef36446abb8ffc799a7aae9f49c553472823aaf9b2add2d2",
+    "web/src/app/page.tsx": "f303d9d56bcf3cae0269b2452070b40728a778286edb2c8c509d2857a7e1f2ef",
+    "web/src/app/register/page.tsx": "bd9c7dfad0aa1837926d018bda710d0e4d92e5ca14e4383590290d851c3139a0",
+    "web/src/components/ProductForm.tsx": "1b07939bd9554b27c05eb51fe69d1bac1da9f3f1e070715c94b27f47bc753432",
+    "web/src/components/ProductTable.tsx": "134b699c92869582aecc37c413ef89ff2a37a885d6568ff437958fd786b946ce",
+    "web/src/components/RecommendationResults.tsx": "122e481cf26237d66d0da0c0fcc23567d9f6d2b489b00c8b0f58d44f91589344",
+    "web/src/lib/api.ts": "af71d9df06ef0f7d5649af375bc0fcb3aff1d233fb936fcddacdddcf8eba78f5",
+    "web/src/lib/session.ts": "96b0febecf3161bfac7326276e1f28bcb7dfcab90800aacc7444fa28ead1b4cd",
+    "web/src/middleware.ts": "0a9cfd60c3366c69a17209406be3f5525bffcb29968955c459c4e7857e956f1f",
+    "web/tests/e2e/auth.spec.ts": "bb68c2221cb378652d81d09c70f1482825821fd697607565fb5eec260d868658",
+    "web/tests/e2e/catalog.spec.ts": "67b278cd5d84687d752dd714bccda4f8c2a700cac02a173fbde21d3605c14f15",
+    "web/tests/e2e/search.spec.ts": "fe94c74fd6a74339207d62b904d4efce93c255116e67e806eca760662b2404b7",
+    "web/tests/e2e/security.spec.ts": "90f7ac9279be517aabd13e626c3a0effb5b08e46dc1463a7ea7cafb5130767d1"
+  },
+  "backend": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "18",
+    "time": "0.805",
+    "timestamp": "2026-10-14T09:37:12.869636+07:00",
+    "hostname": "MacBook-Pro-2.local"
+  },
+  "frontend": {
+    "startTime": "2026-10-14T03:14:02.431Z",
+    "duration": 2173.406,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "reset": {
+    "status": "PASS",
+    "test_ids": [
+      "TEST-010",
+      "TEST-003",
+      "TEST-004",
+      "TEST-020",
+      "TEST-021"
+    ],
+    "checks": [
+      {
+        "operation": "restart",
+        "old_login": 401,
+        "reused_user_id": 1,
+        "stale_token": 401,
+        "new_token": 200,
+        "restored_demo_products": 10,
+        "api": "http://localhost:55036",
+        "web": "http://localhost:55034"
+      },
+      {
+        "operation": "recreate",
+        "old_login": 401,
+        "reused_user_id": 1,
+        "stale_token": 401,
+        "new_token": 200,
+        "restored_demo_products": 10,
+        "api": "http://localhost:55037",
+        "web": "http://localhost:55034"
+      }
+    ],
+    "storage": {
+      "mount": "/data",
+      "type": "tmpfs",
+      "options": "rw,noexec,nosuid,nodev,size=64m,uid=10001,gid=10001,mode=0700",
+      "api_uid": 10001
+    }
+  },
+  "security": {
+    "generated_at": "2026-10-14T03:14:59.250116+00:00",
+    "test_id": "TEST-019",
+    "failure_policy": "Missing/invalid reports, tool errors and SCA/SAST/IaC findings fail. DAST high findings fail; lower findings require documented review per TEST.md.",
+    "scope": "SCA installed backend/frontend dependencies; configured Python SAST rules; Dockerfile/GitHub Actions IaC; unauthenticated passive ZAP Web scan.",
+    "scans": {
+      "sca": {
+        "status": "PASS",
+        "observed": {
+          "dependency_entries": 67,
+          "pip_vulnerabilities": 0,
+          "npm_advisories": 0,
+          "skipped_packages": [
+            "ai-sales-support-hub-backend"
+          ],
+          "exits": [
+            0,
+            0
+          ]
+        }
+      },
+      "sast": {
+        "status": "PASS",
+        "observed": {
+          "findings": 0,
+          "errors": 0,
+          "scanned_files": 23,
+          "exit": 0
+        }
+      },
+      "iac": {
+        "status": "PASS",
+        "observed": {
+          "frameworks": [
+            {
+              "type": "dockerfile",
+              "summary": {
+                "passed": 118,
+                "failed": 0,
+                "skipped": 0,
+                "parsing_errors": 0,
+                "resource_count": 2,
+                "checkov_version": "3.3.29"
+              }
+            },
+            {
+              "type": "github_actions",
+              "summary": {
+                "passed": 180,
+                "failed": 0,
+                "skipped": 0,
+                "parsing_errors": 0,
+                "resource_count": 0,
+                "checkov_version": "3.3.29"
+              }
+            }
+          ],
+          "exit": 0
+        }
+      },
+      "dast": {
+        "status": "PASS",
+        "observed": {
+          "severity_by_alert_type": {
+            "informational": 4,
+            "low": 0,
+            "medium": 1,
+            "high": 0
+          },
+          "alerts": [
+            {
+              "id": "10055",
+              "name": "CSP: Wildcard Directive",
+              "risk": "Medium (High)",
+              "instances": 5
+            },
+            {
+              "id": "10019",
+              "name": "Content-Type Header Missing",
+              "risk": "Informational (Medium)",
+              "instances": 1
+            },
+            {
+              "id": "10109",
+              "name": "Modern Web Application",
+              "risk": "Informational (Medium)",
+              "instances": 2
+            },
+            {
+              "id": "10049",
+              "name": "Non-Storable Content",
+              "risk": "Informational (Medium)",
+              "instances": 5
+            },
+            {
+              "id": "10049",
+              "name": "Storable and Cacheable Content",
+              "risk": "Informational (Medium)",
+              "instances": 5
+            }
+          ],
+          "exit": 2,
+          "target": [
+            "http://web:3000"
+          ],
+          "review_required": true
+        }
+      }
+    },
+    "status": "PASS"
+  },
+  "commands": [
+    {
+      "command": "pytest -q --junitxml=<private-report> (backend/)",
+      "exit": 0
+    },
+    {
+      "command": "npm ci --no-audit --no-fund",
+      "exit": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "exit": 0
+    },
+    {
+      "command": "npm run build",
+      "exit": 0
+    },
+    {
+      "command": "playwright test --reporter=json (isolated real containers)",
+      "exit": 0
+    },
+    {
+      "command": "python tests/verification/check_reset.py --project saleshub-reset-20261014 --output <private-report>",
+      "exit": 0
+    },
+    {
+      "command": "pytest -q tests/verification/test_security_triage.py",
+      "exit": 0
+    },
+    {
+      "command": "bash scripts/security/run-scans.sh (four categories)",
+      "exit": 0
+    }
+  ],
+  "private_report_hashes": {
+    "architecture-render.json": "5cfae70de688267de1ef239eaa3eb13d311a38887713f5df9e4151b1a5a2f349",
+    "compose-final.log": "e6cf135669e4a279bcd48fc14f3ae83e5d70a1bf9b8c86874c4b1af0283fb13f",
+    "playwright-pass.json": "49cca6bc913c46883526915eb5f0e7fa0a5e3e779e6aa4e57346858dd8905d14",
+    "pytest-final.xml": "210697512c8219d4bae235cd96a40d9478f247258d13fc1e8c168c6b2e9af0a6",
+    "reset-final.json": "6c013dd6c5bb0c35a3fbd34d944263f19105c3b32a8e52e41e36971123ee6a07",
+    "security-verified/dast/api-readiness.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    "security-verified/dast/cleanup-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/dast/collection-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/dast/container-cleanup.log": "5ee7752c190b5dba2f1aff49e64387a59d753fec0dab788874a65f02a643d45b",
+    "security-verified/dast/container-id.txt": "9d7c3cab4ec28a5d1fd7ecfb1d8c268a51bd7fef9827307fb7d45a453ad876e4",
+    "security-verified/dast/copy-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/dast/copy.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-verified/dast/create-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/dast/create.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-verified/dast/finished-at.txt": "de0d63a9df458b41fa1eab0236b36a09f8817be4c18983b132790f197bb928dc",
+    "security-verified/dast/image-id.txt": "35e2ae9a91de89243867bfe3ea54f87df49fbb5a85734d94669f414b042846fa",
+    "security-verified/dast/scanner.log": "2754f757d7bff82853ec648475fd75856d157ece72c9b7f1d0bd63b4ed97b172",
+    "security-verified/dast/start-exit.txt": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "security-verified/dast/started-at.txt": "e8a668b61a7729b1f83d2e1b8877a8b67128f125298d86aaa57f7694ce4487c6",
+    "security-verified/dast/target.txt": "6f9148ca970982f6fb07411e1d92884ff3d97fd1511d31075e7d6642ca2ced0b",
+    "security-verified/dast/version.txt": "4ddefbffc3a046fe348112ce6b0d1c4dabbb5362e6790beb67dd64b2a828c3e4",
+    "security-verified/dast/web-readiness.html": "8c142a0f106e5ebdbb3704fbe776f05e7d03590e8a8bff396f1c78186a0a0094",
+    "security-verified/dast/zap-exit.txt": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+    "security-verified/dast/zap.html": "777944d93688d9aead10c739671a5a708e41e544ae8c30309ef7457c27c5031e",
+    "security-verified/dast/zap.json": "f6b4eebfb27ec8aceaa17db481a30b46f8f8fb12bd89bd74477f5bd0f6eb3be2",
+    "security-verified/dast/zap.yaml": "5c332d04b4ad0674920467764b867b6cc06e5b66d2fedf62bc731fc6fc116ea2",
+    "security-verified/iac/checkov-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/iac/checkov-version.txt": "d63989fae2bda206f79007737b4243be07ea863c1b8ec289d65e4f356171ec68",
+    "security-verified/iac/checkov.json": "895f3b8a984f13aa9d6853efedaeea1324969e7343112428a21edba5c1738b83",
+    "security-verified/iac/checkov.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-verified/sast/semgrep-command.txt": "4d60739cbb6a8262ab623c051c954b280f4fb1dd969a529d6c6e8a9664362fed",
+    "security-verified/sast/semgrep-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/sast/semgrep-version.txt": "7a274beadd1d09e445986d08e4d396097278e8e8952cdd48b37378763d77d3b2",
+    "security-verified/sast/semgrep.json": "ab24997d309bd04ec703fc5007940b603e562d1241d62ec3aa73b9f93bc2328b",
+    "security-verified/sast/semgrep.log": "b15bd3090ebcb42d3af6bff9a3baf389b5952f15621da3fa032b790792f867cc",
+    "security-verified/sca/npm-audit-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/sca/npm-audit.json": "0996d4a6a1845f84947443ac1c9266bca8a408c284282659c44a46f24077691e",
+    "security-verified/sca/npm-audit.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "security-verified/sca/npm-version.txt": "005206ab803f8881d8227540b7980b37e723b69a8849edb31734a90b7e7964e2",
+    "security-verified/sca/pip-audit-command.txt": "60a48210b8901d4623fc2918ffb9091ca6a22e9365ce94d72fe9a81d934c385f",
+    "security-verified/sca/pip-audit-exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "security-verified/sca/pip-audit-version.txt": "70d9a63a0ea389b4992009be156f8738d7c22f2f5c049084054528ed7f9eee0c",
+    "security-verified/sca/pip-audit.json": "624d32a109a8718cb4a35a2a2f435b2840cc7da4625b9817337eca5ed06a53a3",
+    "security-verified/sca/pip-audit.log": "aa1121d8cce1ce6c87bbcd829ff5884b75668848d51f31d493b16427cf295bf1",
+    "security-verified/source.json": "f1f5d0c49272ea35b72e7c0e4e433cc5234badb34c73fb40d2edce5577a83501",
+    "security-verified/triage-summary.json": "4019bb4ca51d862d3861ccdc19aff02c04a5b12f3e67f3fe96ad10417db919aa",
+    "triage-tests.log": "1253f6ca793d46eb9c48b6f1606064815d0bb62be75a701be4c49494044e47ce",
+    "typecheck-final.log": "0e56693afdb484a861b2f50e5682975cc799ca2b27fff4098ec8fa8d3252f2e7",
+    "web-build-final.log": "dde41ae91452b53d02e8ddfa0a5b53272e14563d55ad83b130c62213eea72c16"
+  },
+  "dast_review": {
+    "10055": "img-src https: supports configured arbitrary HTTPS product images. Medium policy breadth remains; scripts/styles use nonce restrictions. No high alert observed.",
+    "10019": "Empty root redirect lacks Content-Type; no sensitive response body.",
+    "10109": "JavaScript application detection is informational; passive scope does not prove authenticated journeys.",
+    "10049": "Dynamic documents use no-store; cacheable instances are versioned public JS assets, not account records."
+  }
+}

@@ -83,19 +83,38 @@ test("BFF rejects cross-origin mutations on the published web port", async ({ re
   expect(allowed.status()).toBe(200);
 });
 
+test("registration requires matching passwords and no email", async ({ page }) => {
+  const name = `confirm_${Date.now()}`;
+  await page.goto("/register");
+  await expect(page.getByLabel("Email", { exact: true })).toHaveCount(0);
+  await page.getByLabel("Username", { exact: true }).fill(` ${name.toUpperCase()} `);
+  await page.getByLabel("Password", { exact: true }).fill("testing-password-123");
+  await page.getByLabel("Confirm password", { exact: true }).fill("different-password-123");
+  await page.getByRole("button", { name: "Register" }).click();
+  await expect(page.locator("form").getByRole("alert")).toHaveText("Passwords do not match");
+  await expect(page).toHaveURL(/\/register/);
+  await page.getByLabel("Confirm password", { exact: true }).fill("testing-password-123");
+  await page.getByRole("button", { name: "Register" }).click();
+  await expect(page).toHaveURL(/\/login/);
+  await page.getByLabel("Username").fill(name);
+  await page.getByLabel("Password", { exact: true }).fill("testing-password-123");
+  await page.getByRole("button", { name: /Sign in/ }).click();
+  await expect(page).toHaveURL(/\/search/);
+});
+
 test("register, login, reject wrong credentials, and logout", async ({ page }) => {
   const name = `person_${Date.now()}`;
   await page.goto("/register");
   await page.getByLabel("Username").fill(name);
-  await page.getByLabel("Email").fill(`${name}@example.test`);
-  await page.getByLabel("Password").fill("testing-password-123");
+  await page.getByLabel("Confirm password", { exact: true }).fill("testing-password-123");
+  await page.getByLabel("Password", { exact: true }).fill("testing-password-123");
   await page.getByRole("button", { name: "Register" }).click();
   await expect(page).toHaveURL(/\/login/);
   await page.getByLabel("Username").fill(name);
-  await page.getByLabel("Password").fill("wrong-password");
+  await page.getByLabel("Password", { exact: true }).fill("wrong-password");
   await page.getByRole("button", { name: /Sign in/ }).click();
   await expect(page.getByText("Incorrect username or password", { exact: true })).toBeVisible();
-  await page.getByLabel("Password").fill("testing-password-123");
+  await page.getByLabel("Password", { exact: true }).fill("testing-password-123");
   await page.getByRole("button", { name: /Sign in/ }).click();
   await expect(page).toHaveURL(/\/search/);
   await page.getByRole("button", { name: /Sign out/ }).click();

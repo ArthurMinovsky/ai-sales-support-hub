@@ -5,6 +5,7 @@
 __pycache__/
 .pytest_cache/
 *.py[cod]
+*.egg-info/
 .venv/
 node_modules/
 .next/
@@ -23,3 +24,4 @@ evidence/release/
 /WALKTHROUGH.html
 /docs/presentation/EXAM_APPENDIX.html
 /docs/presentation/PITCH.md
+/docs/presentation/APPENDIX_VALIDATION.json

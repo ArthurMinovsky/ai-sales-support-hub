@@ -4,12 +4,12 @@ async function signedIn(page: Page) {
   const name = `search_${Date.now()}`;
   await page.goto("/register");
   await page.getByLabel("Username").fill(name);
-  await page.getByLabel("Email").fill(`${name}@example.test`);
-  await page.getByLabel("Password").fill("testing-password-123");
+  await page.getByLabel("Confirm password", { exact: true }).fill("testing-password-123");
+  await page.getByLabel("Password", { exact: true }).fill("testing-password-123");
   await page.getByRole("button", { name: "Register" }).click();
   await expect(page).toHaveURL(/\/login\?registered=1/);
   await page.getByLabel("Username").fill(name);
-  await page.getByLabel("Password").fill("testing-password-123");
+  await page.getByLabel("Password", { exact: true }).fill("testing-password-123");
   await page.getByRole("button", { name: /Sign in/ }).click();
   await expect(page).toHaveURL(/\/search/);
 }

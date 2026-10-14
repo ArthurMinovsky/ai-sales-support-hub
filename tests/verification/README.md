@@ -26,7 +26,7 @@
 
 1. Backend: create `evidence/backend/`, install test dependencies, and run `pytest -q --junitxml=../evidence/backend/pytest-results.xml` from `backend/` (TEST-001..005,008..009,011..013,024).
 2. Frontend: `cd web && npm ci --no-audit --no-fund && npx playwright install --with-deps chromium && npm run test:e2e` against e2e stack (TEST-006/007/014..017).
-3. Persistence TEST-010: from plain Compose only, create user/product through authorized REST; record ID; `docker compose down` **without -v**; `docker compose up --build -d`; login and GET record; save IDs/times/status to `evidence/docker/persistence.json`; teardown preserves volume.
+3. Reset TEST-010: after E2E completes, run `python3 tests/verification/check_reset.py --project saleshub-reset-<run-id> --output evidence/docker/reset.json` on an isolated fixture stack. It restarts and force-recreates the API, verifies restored samples, account reuse and rejection of earlier tokens. Do not run it against a shared stack.
 4. TEST-020/021: plain `docker compose up --build`, discover Web/API host ports with `docker compose port web 3000` and `docker compose port api 8000`, then verify Web `/login`, API `/health` and Swagger paths; save `evidence/docker/smoke.json` with source identity, discovered URLs and timestamps. Internal ports remain 3000/8000.
 5. TEST-018: with real OpenRouter key in runtime only, submit actual query, redact logs, record model/status/provider metadata and resulting DB-known IDs to `evidence/openrouter/live-inference-redacted.json`. If missing key, report BLOCKED.
 6. TEST-019: start live ready stack, run scripts/security/run-scans.sh with required tool dependencies; capture four tools' exit/status/severity and reports, do not claim unauthenticated ZAP baseline covers authenticated endpoints. Stop stack created by run only; preserve reports.
@@ -34,6 +34,6 @@
 
 ## Cleanup and collision prevention
 
-Only one runtime owner should control each Compose project and writable DB at a time. Automatic published host ports let separate projects run without port collisions; each project must use its own named volume. Capture logs/screenshots/evidence **before** cleanup; never use `docker compose down -v` on user data. Do not kill other programs by name. A single successful fixture pilot does not complete all TEST cases. Save failures with source digest and observed vs expected rather than changing approved criteria.
+Only one runtime owner should control each Compose project. Each API uses its own disposable tmpfs. Capture logs/screenshots/evidence before cleanup. Teardown only the isolated stack created by the verification run; never remove unrelated volumes or kill other programs by name. A successful pilot does not complete all TEST cases. Save failures with source digest and observed versus expected.
 
 > **Lockfile status:** `web/package-lock.json` contains the npm-resolved dependency graph derived from the declared ranges. Historical clean `npm ci`, TypeScript checks and production build passed; current dynamic-port validation is recorded separately under `evidence/dynamic-ports/`.

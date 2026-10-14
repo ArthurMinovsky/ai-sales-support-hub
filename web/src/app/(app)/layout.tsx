@@ -18,7 +18,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
         <span className="logo" aria-hidden="true">
           <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M8 1.5 14 4.9v6.2L8 14.5 2 11.1V4.9L8 1.5Z" stroke="#fff" strokeWidth="1.4" strokeLinejoin="round"/><path d="M8 5.2 11 7v3.4L8 12.1 5 10.4V7l3-1.8Z" fill="#fff"/></svg>
         </span>
-        <span><strong>Sales Support Hub</strong><small>Sales Support Hub</small></span>
+        <span><strong>Sales Support Hub</strong><small>PRODUCT WORKSPACE</small></span>
       </div>
       <nav aria-label="Main navigation" className="nav-stack">
         <Link href="/search"><SearchIcon /> Product Search</Link>

@@ -71,7 +71,7 @@ Shared paths are each **created exactly once** with their complete final content
 
 ### PLAN-001-A02 — Action 2
 
-- **Do:** Create the named Next/FastAPI/Compose scaffold; provide health endpoint and persistent `/data` volume.
+- **Do:** Maintain the Next/FastAPI/Compose scaffold and health endpoint; use bounded disposable `/data` tmpfs owned by UID/GID 10001.
 - **Done when:** Both Docker images build after the *complete* initially approved code/create batch, required services expose declared ports and no secrets are committed.
 - **Verify:** TEST-020 after User approves its Core test invocation; only `/docs` route accessibility may be inspected here. TEST-021 complete endpoint/schema assertion belongs to PLAN-007 after PLAN-006 IR.
 - **Checkpoint:** STOP on undocumented additional files/missing JWT secret/health failure.
@@ -99,3 +99,7 @@ Shared paths are each **created exactly once** with their complete final content
 - Ask separately before linked Core test executions. If a test fails, inspect and request fresh permission for any Core edit; don't redefine TEST expectations.
 - Stop and request a higher-contract amendment if approved scope, interface, auth/security boundary, classification, or verification seam must change. Record actual evidence separately.
 - **This proposal is not permission to execute commands, mutate a repository, or claim any test passed.**
+
+## Current repair execution
+
+The User-approved PLAN-010 supersedes email-registration and retained-volume assumptions in this historical plan. See revised PRD-001/008, Architecture and TEST-001/002/010. Unaffected implementation responsibilities remain valid.

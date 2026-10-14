@@ -43,7 +43,7 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     env:
-      COMPOSE_PROJECT_NAME: saleshub-ci
+      COMPOSE_PROJECT_NAME: saleshub-reset-ci
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -54,7 +54,7 @@ jobs:
           # checkov:skip=CKV_SECRET_6: CI JWT is generated at runtime; no hardcoded credential exists
           printf 'JWT_SECRET=%s\nAPP_ORIGIN=\n' "$(openssl rand -hex 32)" > .env
       - name: Boot Compose with mocked external OpenRouter ONLY
-        run: docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-ci up --build -d
+        run: docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-reset-ci up --build --force-recreate -d --wait --wait-timeout 180
       - name: Discover Docker allocated host ports
         run: |
           web_port="$(docker compose port --index 1 web 3000 | sed -n '1s/.*://p')"
@@ -67,15 +67,17 @@ jobs:
             if curl -fsS "$API_BASE_URL/health" && curl -fsS "$PLAYWRIGHT_BASE_URL/login" >/dev/null; then exit 0; fi
             sleep 3
           done
-          docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-ci logs
+          docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-reset-ci logs
           exit 1
       - name: Install Playwright
         run: cd web && npm ci --no-audit --no-fund && npx playwright install --with-deps chromium
       - name: Playwright browser E2E
         run: cd web && npm run test:e2e
+      - name: API restart, recreation and stale-session isolation
+        run: python3 tests/verification/check_reset.py --project saleshub-reset-ci --output evidence/docker/reset.json
       - name: Container cleanup
         if: always()
-        run: docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-ci down
+        run: docker compose -f compose.yaml -f compose.e2e.yaml -p saleshub-reset-ci down
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -83,6 +85,7 @@ jobs:
           path: |
             evidence/frontend/
             web/test-results/
+            evidence/docker/reset.json
   sca_sast_iac:
     runs-on: ubuntu-latest
     steps:

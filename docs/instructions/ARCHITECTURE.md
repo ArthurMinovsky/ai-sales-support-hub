@@ -1,6 +1,6 @@
 # ARCHITECTURE — AI Sales Support Hub
 
-> **PROPOSAL R1 — NOT APPROVED.** Semantic pair: `ARCHITECTURE.proposal.md` and `ARCHITECTURE.proposal.html` contain the same modules, flows, security rules and tradeoffs. Derived from approved OUTCOME `801acfc6…334bbb1` and **conditional** Constitution/PRD R1 drafts. Classification is copied from PRD, not assigned here.
+> R2 — Behavior amendment authorized by the User's approved repair plan, 14 October 2026. Original governing bytes and approval history are privately archived. This revision removes email registration, adopts disposable Docker state and retains existing auth/AI security boundaries.
 
 ## 1. Architecture driving requirements
 
@@ -14,7 +14,7 @@ flowchart TD
     W --> B[Next.js same-origin BFF routes]
     B -->|Bearer JWT server-to-server| A[FastAPI :8000]
     R[API reviewer / Swagger] -->|Bearer token| A
-    A --> DB[(SQLite /data/app.db persistent volume)]
+    A --> DB[(SQLite /data/app.db disposable tmpfs)]
     A -->|HTTPS + server-only key| OR[OpenRouter Chat Completions]
     G[GitHub Actions] --> V[pytest / Playwright / scanner reports / image artifact]
 ```
@@ -27,16 +27,16 @@ No browser-to-OpenRouter path. OpenRouter never receives the user password/token
 Browser (untrusted) :3000
   └─ Next.js UI + same-origin Route Handlers (BFF, cookie boundary)
        └─ Compose private network → FastAPI (JWT verify, Pydantic validation)
-             ├─ /data/app.db on Docker named volume
+             ├─ /data/app.db on bounded Docker tmpfs
              └─ outbound HTTPS to OpenRouter
 Reviewer: localhost:8000/docs → documented bearer-authorized API
 CI: temporary Compose stack → test suites + scans → retained reports
 ```
 
-- **ARCH-INV-001:** Every FastAPI protected API request validates a signed 3600-second JWT on the server (including calls that bypass Next.js).
+- **ARCH-INV-001:** Every FastAPI protected API request validates a signed 3600-second JWT with the current random API-start epoch on the server (including calls that bypass Next.js).
 - **ARCH-INV-002:** Browser JavaScript never reads bearer tokens or OpenRouter keys; BFF owns HttpOnly session cookie; state-changing BFF handlers verify `Origin` matching configured `APP_ORIGIN` (same-site cookie is not sufficient for all CSRF cases).
 - **ARCH-INV-003:** Returned suggestion IDs must be a subset of the actual database candidate IDs; sanitize/validate external model JSON before response.
-- **ARCH-INV-004:** Docker launch works after documented environment configuration with one command and persistent named volume. No OpenRouter key is needed to serve CRUD; a real AI request without one fails explicitly.
+- **ARCH-INV-004:** Docker launch works after documented environment configuration with one command and disposable tmpfs; each API container start/restart resets data. No OpenRouter key is needed to serve CRUD; a real AI request without one fails explicitly.
 - **ARCH-INV-005:** Review claims rely on executed observations with source identity; mocks cannot substitute for a live OpenRouter inference.
 - **ARCH-INV-006:** Architecture HTML and Markdown carry the same core meaning and proposal revision; any semantic drift blocks approval.
 
@@ -58,10 +58,10 @@ CI: temporary Compose stack → test suites + scans → retained reports
 
 ## 5. Database schema and ownership
 
-- `User(id: int PK, username: str unique, email: str unique, password_hash: str, created_at)`; lowercase normalized username/email comparisons; no plaintext password storage.
+- `User(id: int PK, username: str unique, password_hash: str, created_at)`; trimmed lowercase username comparisons; registration confirms passwords; no plaintext password storage.
 - `Product(id: int PK, name, brand, description, image_url, category, type, subtype, created_at, updated_at)`; required strings validated with Pydantic; `description` minimum 10 chars; url optional display link or string validated as HTTPS URL (no server-side URL fetch).
-- SQLite DB URL `sqlite:////data/app.db`, SQLAlchemy session per request, Docker named volume `app_data:/data`; one API worker to limit SQLite locking. Small index on product name/category. Schema initialized deterministically on startup for demo; migrations are later-scale work.
-- Seed three or more explicitly fictional products via an **idempotent** seed function only when catalog is empty, avoiding overwriting user CRUD. Delete action is hard-delete with confirmation dialog, adequate for disposable demo; no undelete promise.
+- SQLite DB URL `sqlite:////data/app.db`, SQLAlchemy session per request, Docker tmpfs `/data:rw,noexec,nosuid,nodev,size=64m,uid=10001,gid=10001,mode=0700`; one API worker to limit SQLite locking. Small index on product name/category. Schema and demo catalog initialized on each new ephemeral container filesystem for demo; migrations are later-scale work.
+- Seed ten explicitly fictional products via an **idempotent** seed function only when catalog is empty, avoiding overwriting user CRUD. Delete action is hard-delete with confirmation dialog, adequate for disposable demo; no undelete promise.
 - Catalog shared among authenticated BU staff users; no per-product ownership or role model in MVP. This is an explicit assumption, not an enterprise RBAC design.
 
 ## 6. Request sequences and failure branches
@@ -69,7 +69,7 @@ CI: temporary Compose stack → test suites + scans → retained reports
 ### 6.1 Register/Login/Auth
 
 1. Browser POST `/api/auth/register` to same-origin BFF; route forwards validated JSON to FastAPI register. Backend hashes Argon2id and persists unique account, returns 201 or validation/conflict status.
-2. Browser POST `/api/auth/login` with username/password to BFF; BFF forwards to backend; backend verifies hash, signs JWT exp=issued+3600s. BFF writes HttpOnly, SameSite=Lax, `Secure` when HTTPS, bounded Max-Age cookie. Browser receives a safe session response, not the bearer token itself.
+2. Browser POST `/api/auth/login` with username/password to BFF; BFF forwards to backend; backend verifies hash, signs JWT exp=issued+3600s with the current API-start epoch. BFF writes HttpOnly, SameSite=Lax, `Secure` when HTTPS, bounded Max-Age cookie. Browser receives a safe session response, not the bearer token itself.
 3. Protected UI layout checks cookie presence and directs to Login if missing; protected BFF checks cookie and Origin for mutating requests; backend verifies signed token on **every** protected call. `GET /api/auth/me` confirms session validity on demand. Logout clears cookie.
 4. Invalid/bad/expired signature => backend 401; BFF relays sanitized 401 and UI prompts login. No secret leaks in logs.
 
@@ -83,7 +83,7 @@ Browser query → same-origin BFF → FastAPI protected route → fetch catalog 
 
 ### 6.4 Docker / CI
 
-Reviewer configures local `.env` according to `.env.example` (JWT key required; OpenRouter key optional only for startup), then invokes `docker compose up --build` once. Services `web` and `api` share Compose network; `web` uses `BACKEND_INTERNAL_URL=http://api:8000`, API listens 0.0.0.0:8000, Web listens :3000. SQLite volume survives `docker compose down` without `-v` and re-up. Explicit documented volumes/healthchecks. `api` may have a health status earlier than Web; Web startup should not depend on OpenRouter availability.
+Reviewer configures local `.env` according to `.env.example` (JWT key required; OpenRouter key optional only for startup), then invokes `docker compose up --build --force-recreate` once. Services `web` and `api` share Compose network; `web` uses `BACKEND_INTERNAL_URL=http://api:8000`, API listens 0.0.0.0:8000, Web listens :3000. SQLite is disposable: API container stop/restart/recreation clears accounts and edits. Re-up initializes zero users and ten demo products. A no-op up leaves a running API unchanged. Explicit documented volumes/healthchecks. `api` may have a health status earlier than Web; Web startup should not depend on OpenRouter availability.
 
 GitHub Actions jobs: Python Pytest, Next type/lint, integration Playwright with isolated mock-provider fixture, docker image build artifact, SCA (pip-audit/npm audit), SAST (Semgrep), IaC (Checkov), DAST (ZAP baseline against ephemeral started app). Upload reports even when scans produce findings; set actionable failure policy instead of swallowing exit codes. The ZAP baseline scope is documented (passive/unauthenticated by default); do not call that authenticated comprehensive DAST.
 
@@ -153,8 +153,8 @@ Concrete artifact names are plan-execution targets, not code already written. Ad
 - **Why SQLite?** single Compose deployment; downside single writer; migrate with tests/schema export to PostgreSQL only if real team workload warrants.
 - **Why BFF?** protects browser token and same-origin flow; downside extra Node handler layer requiring explicit CSRF check.
 - **Why hybrid selection?** known-record grounding and manageable token budgets; lexical recall imperfect and demonstrated as such.
-- **Why no cloud?** employer asks Docker and Git URL, not external hosting. No claim of prod SLO/HA.
-- **Rollback:** during demo revert to last Git commit and rebuild; preserve named SQLite volume. DB schema changes/destructive migration need separate approved safety plan; `down -v` is explicitly destructive and is not a normal teardown step.
+- **Why no cloud?** original specification asks Docker and Git URL, not external hosting. No claim of prod SLO/HA.
+- **Rollback:** during demo revert to last Git commit and rebuild; preserve the private recovery backup; runtime SQLite is disposable. DB schema changes/destructive migration need separate approved safety plan; `down -v` is explicitly destructive and is not a normal teardown step.
 
 ## 11. Architecture approval checklist
 

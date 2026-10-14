@@ -20,7 +20,7 @@ export default function LoginPage() {
     finally { setPending(false); }
   }
   return <main className="auth-bg"><div className="auth-card">
-    <div className="eyebrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5 14 4.9v6.2L8 14.5 2 11.1V4.9L8 1.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg> Sales Support Hub · Sales Support Hub</div>
+    <div className="eyebrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.5 14 4.9v6.2L8 14.5 2 11.1V4.9L8 1.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg> Sales Support Hub</div>
     <h1>Welcome back</h1>
     <p className="muted sub">Sign in to find the right solution for your customers.</p>
     <form onSubmit={submit} className="form-grid">

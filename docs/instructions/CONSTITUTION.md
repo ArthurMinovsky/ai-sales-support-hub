@@ -23,7 +23,7 @@
 - **RULE-005 — TEST ownership:** `TEST.md` is the immutable verification specification until explicitly amended. Automated TESTs are run/evaluated by the agent with required permission; Manual TESTs receive the User's decision after review. Results and failures reside in evidence records, not rewritten into TEST.
 - **RULE-006 — Verification hierarchy:** Unit/code passing does not mean Docker/system passing, which does not mean OUTCOME accepted. Real OpenRouter evidence cannot be replaced by a mocked call. Scans must be run and findings reported, not just configured.
 - **RULE-007 — Test-first plan:** Where an executable behavior seam exists, PLAN schedules test-first small slices; a valid RED is caused by missing approved behavior, then minimal implementation and GREEN. Initial new-project code/test file creation may be one batch, followed by linked Plan test loops.
-- **RULE-008 — Safety:** Never commit secrets. Validate product input; fail closed on invalid/expired tokens; treat OpenRouter failure as distinguishable from success. Demo data must not masquerade as actual Demo catalog.
+- **RULE-008 — Safety:** Never commit secrets. Validate product input; fail closed on invalid/expired tokens; treat OpenRouter failure as distinguishable from success. Demo data must remain explicitly fictional.
 - **RULE-009 — Docker mandatory:** Do not treat the release as complete without one documented Docker Compose launch path and a genuine clean-instance demonstration. State prerequisite Docker installation and required local environment setup explicitly; no undocumented manual services.
 
 ## 4. Amendment propagation and user review matrix
@@ -47,4 +47,4 @@
 
 ## 7. Governance rationale and source map
 
-This Constitution supports `OUT-001`–`OUT-008`; especially OUT-003/007 for auth and security, OUT-004/008 for test/evidence, OUT-005 for Docker/CI/scans and OUT-006 for handover. Source includes the approved Outcome, Sales Support Hub project (three pages), and the chosen Full Implementation Workflow. No repository or ClickUp task has yet been confirmed; default harness for draft review is this ChatGPT conversation; repository initialization remains a separate permission gate.
+This Constitution supports `OUT-001`–`OUT-008`; especially OUT-003/007 for auth and security, OUT-004/008 for test/evidence, OUT-005 for Docker/CI/scans and OUT-006 for handover. Sources include the approved Outcome, original product specification and chosen implementation workflow. The User-approved repair plan supersedes earlier email and storage requirements; original governing records are archived privately.

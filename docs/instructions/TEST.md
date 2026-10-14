@@ -1,29 +1,29 @@
 # TEST — AI Sales Support Hub (Verification Contract)
 
-> **PROPOSAL R1 — NOT APPROVED.** Source: approved OUTCOME `801acfc6…334bbb1`, conditional Constitution/PRD/Architecture R1 proposals. No tests have been run. PASS is never inferred from an approved test definition.
+> R2 — Behavior amendment authorized by the User's approved repair plan, 14 October 2026. Original governing bytes and approval history are privately archived. This revision removes email registration, adopts disposable Docker state and retains existing auth/AI security boundaries.
 
 ## 1. Definitions and ownership
 
 - **Automated** = agent executes approved test and evaluates output under execution permission. **Manual** = User examines actual output after independent code review and decides PASS/FAIL.
 - **Code verification** (isolated pytest/typecheck), **system verification** (containers/browser/Swagger/external API/CI/scans), and **Outcome verification** (all mandated proof) are separate levels.
 - Where applicable, test through public FastAPI HTTP REST, Next.js visible UI, Compose launch, GitHub Action job output. Mock only the OpenRouter external boundary for deterministic unit/E2E; live provider smoke remains separately required.
-- Approved TEST is static; `evidence/*.json`, CI logs, screenshots, reports capture mutable observations. All are currently `UNVERIFIED`.
+- Approved TEST defines expectations; evidence records capture actual observations. Current repair results are recorded separately; any unrun scenario remains UNVERIFIED.
 - TDD applicable to behavior cases exposing public response or browser-visible state; no TDD for artifact structure/manual pitching/scanner setup, with justification.
 
 ## 2. Test cases — contract table
 
 | ID | Seam / method | Precondition and procedure | Expected observation | Mode / level | PRD/OUT/CORE |
 |---|---|---|---|---|---|
-| TEST-001 | `POST /api/auth/register` pytest HTTP (TDD) | Fresh temp DB; submit valid username/email/password | 201, persisted password_hash != password, can subsequently login | Auto/code | PRD-001; OUT-003/007; CORE-001 |
-| TEST-002 | Registration negative HTTP (TDD) | Attempt username/email duplicate and malformed fields | 409/422, no duplicated user, no password in response/log | Auto/code | PRD-001; OUT-007; CORE-001 |
+| TEST-001 | `POST /api/auth/register` pytest HTTP (TDD) | Fresh temp DB; submit normalized username/password/confirm_password | 201 UserPublic without email/password fields; stored hash verifies; can subsequently login | Auto/code | PRD-001; OUT-003/007; CORE-001 |
+| TEST-002 | Registration negative HTTP (TDD) | Attempt duplicate username, mismatched/missing confirmation and malformed fields | 409/422, no duplicated user, no password in response/log | Auto/code | PRD-001; OUT-007; CORE-001 |
 | TEST-003 | `POST /api/auth/login` HTTP JWT (TDD) | Sign in with valid credentials; inspect decoded signed token exp and expires_in | 200; expiration 3600s after issuance within clock tolerance; never plaintext | Auto/code | PRD-001; OUT-003; CORE-001 |
-| TEST-004 | Invalid login/expired JWT HTTP (TDD) | Wrong password, forged signature, expired JWT | 401; backend protected call denied | Auto/code | PRD-001/002; OUT-003/007; CORE-001 |
+| TEST-004 | Invalid login/expired JWT HTTP (TDD) | Wrong password, forged signature, expired JWT and previous-start JWT after account-ID reuse | 401; backend protected call denied | Auto/code | PRD-001/002; OUT-003/007; CORE-001 |
 | TEST-005 | `GET /api/auth/me`, CRUD, Suggestion (TDD) | No token then valid bearer then expired token | All protected surfaces reject missing/expired bearer regardless of Next.js | Auto/API | PRD-002; OUT-003/007; CORE-001 |
 | TEST-006 | BFF mutation routes `Origin` check (TDD) | Malicious Origin submits POST/PUT/DELETE with cookie; allowed Origin control | Wrong Origin denied; allowed origin can progress; no wildcard trust | Auto/system | PRD-NFR-001; OUT-007; CORE-001 |
 | TEST-007 | `POST /api/auth/logout`, UI guard (TDD) | Sign in, logout, refresh protected page | Cookie cleared; protected page reroutes to login; API 401 | Auto/E2E | PRD-002/007; OUT-003; CORE-001 |
 | TEST-008 | `/api/products` HTTP CRUD (TDD) | Authorized create/list/get/update/delete on temp DB | 201,200,200,200,204; persisted DB reflects expected rows | Auto/API | PRD-003; OUT-003; CORE-002 |
 | TEST-009 | Product validation HTTP (TDD) | Missing name or description under 10 chars, malformed HTTPS URL, unknown ID | 422 for invalid, 404 for nonexistent; no malformed writes; no server-fetch URLs | Auto/API | PRD-003; OUT-007; CORE-002 |
-| TEST-010 | SQLite named-volume restart (not TDD: runtime) | From clean Compose start create user/product, `docker compose down` (without `-v`), re-up | Saved credentials/products still exist | Auto/system | PRD-003/008; OUT-003/005; CORE-002/004 |
+| TEST-010 | Disposable SQLite restart (runtime) | Isolated Compose: create account/product edit, reload, restart API and force-recreate API; re-register same username/ID | Edits survive reload only; restart/recreation restores ten samples and zero accounts; old credentials/token fail; username reusable | Auto/system | PRD-001/003/008; OUT-003/005/007; CORE-001/002/004 |
 | TEST-011 | Suggestion HTTP with mocked adapter (TDD) | Seed known catalog; mocked provider returns 2 known and 1 invented ID | 200 suggestions contain known IDs only, max 3, reasons, DB product details | Auto/API | PRD-004/005; OUT-001/007; CORE-003 |
 | TEST-012 | OpenRouter error surfaces (TDD) | Missing key, timeout, 429, schema-malformed mocked provider response | Typed 503 AI_UNAVAILABLE, no fabricated success, other endpoints healthy | Auto/API | PRD-005; OUT-007; CORE-003 |
 | TEST-013 | Empty catalog suggestion (TDD) | Empty SQLite products, authorized suggest request | 200 empty list and notice, no provider success claim | Auto/API | PRD-004/005; OUT-001; CORE-003 |
@@ -55,7 +55,7 @@ Plan must create `tests/verification/README.md` describing exact commands, envir
 
 - `evidence/backend/pytest-results.xml` and `evidence/backend/summary.json`
 - `evidence/frontend/playwright-report/` and `evidence/frontend/screenshots/`
-- `evidence/docker/smoke.json`, `evidence/docker/persistence.json`
+- `evidence/docker/smoke.json`, `evidence/docker/reset.json`
 - `evidence/openrouter/live-inference-redacted.json`
 - `evidence/security/{sca,sast,dast,iac}/` (raw scanner outputs and triage summaries)
 - `evidence/ci/workflow-run.json`, `evidence/release/image-artifact.json`
@@ -74,5 +74,5 @@ Each record must refer to exact source revision, command/target/environment, tim
 ## 6. Traceability and proposal approval
 
 - Map all 16 stable `US-*.SC-*` scenarios to tests; PRD-001..012 are covered by TEST-001..026; MINOR-001 appearance work only requires existing visible E2E regression.
-- Current results: NONE EXECUTED; no PASS claimed.
+- Current results are retained in the repair report and source-bound evidence. This contract alone claims no executed PASS.
 - No tests are implemented by drafting this `TEST.md`; next artifact must be action-only Plan packages. Any behavior seam change returns to TEST approval.

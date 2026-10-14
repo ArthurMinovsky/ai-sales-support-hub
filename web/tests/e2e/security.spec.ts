@@ -48,7 +48,7 @@ test("strict CSP permits hydration and blocks an untrusted inline script", async
   });
   await page.goto("/login");
   await page.getByLabel("Username").fill("csp_probe_nonexistent");
-  await page.getByLabel("Password").fill("not-a-real-password");
+  await page.getByLabel("Password", { exact: true }).fill("not-a-real-password");
   await page.getByRole("button", { name: /Sign in/ }).click();
   await expect(page.getByText("Incorrect username or password", { exact: true })).toBeVisible();
   expect(violations).toEqual([]);

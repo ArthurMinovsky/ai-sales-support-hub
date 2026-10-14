@@ -12,8 +12,8 @@ services:
       OPENROUTER_MODEL: ${OPENROUTER_MODEL:-openai/gpt-4o-mini}
       OPENROUTER_BASE_URL: ${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1/chat/completions}
       APP_ORIGIN: ${APP_ORIGIN:-}
-    volumes:
-      - app_data:/data
+    tmpfs:
+      - /data:rw,noexec,nosuid,nodev,size=64m,uid=10001,gid=10001,mode=0700
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health',timeout=3)"]
       interval: 10s
@@ -37,5 +37,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 12
-volumes:
-  app_data:

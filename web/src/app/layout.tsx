@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Sales Support Hub · Sales Support Hub",
+  title: "Sales Support Hub",
   description: "Catalog-grounded product recommendation workspace for sales teams",
 };
 

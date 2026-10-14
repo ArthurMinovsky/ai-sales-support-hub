@@ -1,15 +1,16 @@
 # OUTCOME — AI Sales Support Hub
 
-> PROPOSAL ONLY — Not approved. Do not promote to `docs/instructions/OUTCOME.md` without explicit User approval of this exact review revision.
+> R2 — Behavior amendment authorized by the User's approved repair plan, 14 October 2026. Original governing bytes and approval history are privately archived. This revision removes email registration, adopts disposable Docker state and retains existing auth/AI security boundaries.
 
-**Project:** Sales Support Hub — Forward Deployed AI Engineer project  
-**Source of requirements:** `ข้อสอบ.pdf`, pages 1–3, plus User-provided project email  
+**Project:** AI Sales Support Hub
+
+**Source of requirements:** Privately archived product brief and the User-approved repair plan of 14 October 2026
 **Proposal date:** 2026-10-10 (Asia/Bangkok)  
-**Current lifecycle state:** `OUTCOME_REVIEW_REQUIRED`
+**Current lifecycle state:** `REPAIR_VERIFICATION_ACTIVE`
 
 ## 1. Intent / Mission
 
-Deliver an demo-ready **AI Sales Support Hub** enabling a Business Unit sales/product specialist to manage a product catalog and obtain AI-assisted suggestions matched to a customer's stated needs, through a working, protected Next.js web application and a documented FastAPI backend. Demonstrate engineering ownership end-to-end: functionality, reproducible Docker launch, verification, secure defaults, CI, and demonstration-ready evidence.
+Deliver a demo-ready **AI Sales Support Hub** enabling a Business Unit sales/product specialist to manage a product catalog and obtain AI-assisted suggestions matched to a customer's stated needs, through a working, protected Next.js web application and a documented FastAPI backend. Demonstrate engineering ownership end-to-end: functionality, reproducible Docker launch, verification, secure defaults, CI, and demonstration-ready evidence.
 
 ## 2. Desired End State
 
@@ -31,9 +32,9 @@ Backend is implemented in Python with FastAPI. It exposes a Product Suggestion e
 
 ### OUT-003 — Protected Next.js Web and Product Management
 
-Web Application is implemented in TypeScript with Next.js. It provides user registration with Username, Email, and Password stored only as a secure one-way hash; login with username and password; an authenticated response/session valid for **one hour**; protection of restricted application routes and API access via token validation; and the ability to create, list, update, and delete product records.
+Web Application is implemented in TypeScript with Next.js. It provides user registration with Username, Password and matching Confirm password; only the password hash is stored; login with username and password; an authenticated response/session valid for **one hour**; protection of restricted application routes and API access via token validation; and the ability to create, list, update, and delete product records.
 
-**Proof:** Register/login flow, CRUD state surviving a page reload/restart consistent with the selected persistence design, and unauthorized/expired token access rejected by the backend.
+**Proof:** Register/login flow, CRUD survives page reloads during a running API; accounts and edits reset on API container start/restart, and unauthorized/expired token access rejected by the backend.
 
 ### OUT-004 — Automated Test Evidence
 
@@ -49,7 +50,7 @@ Source history is managed with Git and includes a working CI/CD workflow: automa
 
 ### OUT-006 — Handover and demonstration Package
 
-Deliver a Git repository URL suitable for inclusion in an email to Demo. Provide README instructions, environment configuration guidance with no checked-in secrets, product sample data marked as demo data, endpoint docs, test/scan proof, and presentation material for a **maximum 10-minute** local walkthrough containing: **As Is vs To Be, System Architecture, System Features, User Stories, UI Flow**.
+Deliver a generic Git repository URL and technical handover. Provide README instructions, environment configuration guidance with no checked-in secrets, product sample data marked as demo data, endpoint docs, test/scan proof, and presentation material for a **maximum 10-minute** local walkthrough containing: **As Is vs To Be, System Architecture, System Features, User Stories, UI Flow**.
 
 **Proof:** Repository URL available, documented setup/review checklist, presentation content and 10-minute rehearsal/demo path.
 
@@ -73,12 +74,12 @@ The delivered package identifies which mandatory results are verified, blocked, 
 4. Polished but lean UI, concise presentation and README.
 5. Optional extension only after core delivery evidence is complete.
 
-Time budget is constrained; treat **Sunday 2026-10-11 evening (Asia/Bangkok)** as a *provisional internal target based on the User's estimate*, not as a deadline confirmed by Sales Support Hub.
+The current bounded repair is authorized by the User-approved plan of 14 October 2026.
 
 ## 5. Constraints and Boundaries
 
 - Respect all required frameworks/interfaces: Python/FastAPI; TypeScript/Next.js; REST; Swagger/OpenAPI; OpenRouter.
-- Register/Login uses Username and Password; Email is captured at registration; passwords are not plaintext at rest.
+- Registration uses username, password and matching confirmation; login uses username/password. Confirmation is never stored and passwords are hashed.
 - One-hour session/token validity must be enforced at the backend trust boundary, not only with UI redirection.
 - Docker startup may require ordinary runtime secret configuration to exercise the **actual** OpenRouter call; application launch itself must remain one documented Compose command. Never commit a real API key.
 - Demonstration catalog records must be clearly labeled sample/seed data, not asserted to represent Sales Support Hub's actual products.
@@ -97,13 +98,13 @@ These may appear in illustration/concept mockups but are not treated as mandator
 - Invalid or expired session/token: access refused with a clear re-login path; no bypass of protected Backend API.
 - Product suggestion failure: no fabricated “AI success”; capture/log a bounded error without leaking secrets, show recoverable UI messaging.
 - Invalid product fields: predictable client error response; avoid silent corruption.
-- Docker restart: stored users/products persist per the architecture's documented storage choice and volume semantics; persistency proof must be performed rather than presumed.
+- Docker API start/restart: all accounts and product edits reset, ten neutral demo products reload, and earlier sessions are rejected. A no-op up against a running API does not reset it.
 - Browser/API consumers: no undocumented requirement for other clients; REST contract remains clearly inspectable via Swagger.
 
 ## 8. Expected Deliverables
 
 1. Source repository + README + environment example, no secrets.
-2. Runnable Docker Compose project with Next.js app and FastAPI backend and persistent catalog.
+2. Runnable Docker Compose project with Next.js app and FastAPI backend and a disposable runtime catalog.
 3. Swagger/OpenAPI and OpenRouter-backed suggestion flow.
 4. Backend Unit Tests and Frontend E2E tests with execution evidence.
 5. CI/CD with a reproducible build/release artifact, and executed SCA/SAST/DAST/IaC scanning evidence.
@@ -128,7 +129,7 @@ These may appear in illustration/concept mockups but are not treated as mandator
 
 - **D-OUT-01:** Approve this exact Outcome proposal revision or request edits.
 - **D-OUT-02:** Confirm or modify provider-unavailable behavior: prefer application boots and explicitly reports AI unavailable rather than failing to boot altogether.
-- **D-OUT-03:** If known, confirm actual release deadline/time; current Sunday evening is User estimate.
+- **D-OUT-03:** The current repair scope and publication are authorized by the User-approved plan of 14 October 2026.
 - **D-OUT-04:** Choose execution harness before source creation: ChatGPT deliverable ZIP or a specified external/local repository workflow.
 
 **No PRD feature's official `CORE-*` or `MINOR-*` classification is assigned by this Outcome.** The approved PRD owns that classification.
